@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Your Invoice — Lustique Co.";
+const desc = "A sample bridal booking invoice.";
+---
+<BaseLayout slug="invoice.html" title={title} desc={desc}>
+
+  
+  <section class="page-hero">
+    <span class="eyebrow">Your invoice</span>
+    <h1>Invoice LC-INV-2026-0418</h1>
+    <p>Thank you for trusting us with your day, Anke.</p>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:820px;">
+    <div class="doc reveal">
+      <div class="doc-head">
+        <div><div class="brand-name" style="font-size:1.5rem;">Lustique Co.</div><p class="note">Issued 2 Jun 2026 · Wedding 14 Nov 2026</p></div>
+        <div class="note" style="text-align:right;">Bill to:<br>Anke &amp; party<br>Red Ivory Estate, Hartbeespoort</div>
+      </div>
+      <table class="ptable" style="box-shadow:none;">
+        <tr><th>Description</th><th style="text-align:right;">Amount</th></tr>
+        <tr><td>Bridal hair &amp; makeup package (per accepted quote LC-2026-0418)</td><td class="amt">R8 826</td></tr>
+        <tr><td><strong>Booking fee due now (50%)</strong></td><td class="amt"><strong>R4 413</strong></td></tr>
+        <tr><td>Balance — due 14 working days before</td><td class="amt">R4 413</td></tr>
+      </table>
+      <div class="doc-pay">
+        <h3 style="font-size:1.3rem;margin-bottom:.6rem;">Payment</h3>
+        <p class="note">EFT to: Lustique Co. · [Bank] · [Acc no.] · Reference: <strong>LC-0418 Anke</strong><br>Please email proof of payment to info@lustiqueco.co.za to confirm your date.</p>
+      </div>
+      <p class="note center" style="margin-top:1.4rem;">We can’t wait to be part of your day. <strong>Blessings, the Lustique Cosmetology team.</strong></p>
+    </div>
+  </div></section>
+</BaseLayout>

@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Thank You — Lustique Co.";
+const desc = "We've received your enquiry and will reply within 24 hours.";
+---
+<BaseLayout slug="thank-you.html" title={title} desc={desc}>
+
+  
+  <section class="page-hero">
+    <span class="eyebrow">Thank you</span>
+    <h1>Your enquiry is on its way to us.</h1>
+    <p>We’ll reply within 24 hours — often sooner.</p>
+  </section>
+  <section class="section"><div class="wrap prose">
+    <p style="text-align:center;font-size:1.12rem;">We’re honoured you’re considering us for your day. Here’s what happens next:</p>
+    <ol style="max-width:46ch;margin:1.5rem auto;line-height:2;">
+      <li>We review your details and check artist availability for your date.</li>
+      <li>We send your personalised quote — with clear, itemised pricing.</li>
+      <li>You approve it, and we reserve your date with a booking fee.</li>
+    </ol>
+    <div class="center" style="margin-top:2rem;">
+      <p class="note" style="margin-bottom:1rem;">While you wait — a little gift:</p>
+      <a class="btn btn-primary" href="guide-skin-prep.html">Download our 30-day skin-prep guide</a>
+    </div>
+    <p class="note center" style="margin-top:2.4rem;">Blessings,<br>The Lustique Cosmetology Team</p>
+  </div></section>
+</BaseLayout>

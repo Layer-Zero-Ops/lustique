@@ -1,0 +1,4 @@
+---
+const { src, cls = "" } = Astro.props as { src: string; cls?: string };
+---
+<div class={`ph img ${cls}`} style={`background-image:url('assets/${src}')`}></div>

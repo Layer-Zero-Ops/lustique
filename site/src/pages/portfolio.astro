@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Portfolio — Lustique Co.";
+const desc = "Real brides, real mornings — a gallery of recent bridal hair and makeup work.";
+---
+<BaseLayout slug="portfolio.html" title={title} desc={desc}>
+
+  
+  <section class="page-hero">
+    <span class="eyebrow">Portfolio</span>
+    <h1>Real work. Real mornings.</h1>
+    <p>Every image here is real work — never stock, never AI. As each of our artists adds her portfolio, you’ll be able to browse them here too.</p>
+  </section>
+  <section class="section"><div class="wrap">
+    <div class="gallery" id="gallery">
+      <img class="gitem" src="assets/hero.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/s2.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/t1.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/res.jpg" alt="Bridal party hair & makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/s1.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/t3.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/s3.jpg" alt="Bridal party hair & makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/t2.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/t4.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g10.jpg" alt="Bridal party hair & makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g11.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g12.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g13.jpg" alt="Bridal party hair & makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g14.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g15.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy">
+    </div>
+    <p class="note center" style="margin-top:2rem;">Every photograph here is our own real work — never stock, never AI. Per-artist galleries arrive as each of our nine artists shares hers.</p>
+  </div></section>
+  
+  <section class="section cta-band">
+    <div class="wrap">
+      <span class="eyebrow reveal">Let’s begin</span>
+      <h2 class="reveal d1" style="margin-top:1rem;">Tell us about your day.</h2>
+      <p class="reveal d2">Share a few details and we’ll send a personalised quote — usually within 24 hours, often sooner.</p>
+      <a class="btn btn-primary reveal d2" href="quote.html">Get a Quote</a>
+    </div>
+  </section>
+</BaseLayout>

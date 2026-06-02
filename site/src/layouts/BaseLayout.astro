@@ -1,0 +1,48 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE, OG_IMG, SITE_JSONLD } from "../data/site";
+
+interface Props { slug: string; title: string; desc: string; jsonld?: object; }
+const { slug, title, desc, jsonld } = Astro.props;
+const canonical = `${SITE}/${slug === "index.html" ? "" : slug}`;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={desc} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <link rel="alternate icon" href="favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Lustique Co." />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={desc} />
+  <meta property="og:image" content={OG_IMG} />
+  <meta property="og:url" content={canonical} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#A0625E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script type="application/ld+json" set:html={JSON.stringify(SITE_JSONLD)} />
+  {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <Header active={slug} />
+  <main id="main"><slot /></main>
+  <Footer />
+  <div class="cookie-banner" id="cookieBanner" hidden>
+    <p>We use a few cookies to make the site work and to understand how it’s used. <a href="privacy.html">Privacy &amp; cookies</a>.</p>
+    <div class="cookie-actions"><button class="btn btn-ghost" id="cookieDecline">Decline</button><button class="btn btn-primary" id="cookieAccept">Accept</button></div>
+  </div>
+  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+  <script src="site.js" is:inline></script>
+</body>
+</html>

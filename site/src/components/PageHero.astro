@@ -1,0 +1,9 @@
+---
+// title may contain <br>; sub is rendered raw to match the prototype's template-literal output.
+const { eyebrow, title, sub } = Astro.props as { eyebrow: string; title: string; sub?: string };
+---
+<section class="page-hero">
+  <span class="eyebrow">{eyebrow}</span>
+  <h1 set:html={title} />
+  {sub && <p set:html={sub} />}
+</section>

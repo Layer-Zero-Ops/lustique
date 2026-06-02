@@ -1,0 +1,132 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Lustique Co. — Bridal Hair & Makeup Artistry | Pretoria & Beyond";
+const desc = "Bridal hair and makeup for the bride who wants to feel most like herself. Nine artists, 40+ years combined, serving Pretoria, Gauteng and beyond since 2018.";
+---
+<BaseLayout slug="index.html" title={title} desc={desc}>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Bridal Hair &amp; Makeup Artistry · Pretoria &amp; Beyond</span>
+        <h1 class="display">Feel most like <em>yourself</em>.</h1>
+        <p class="hero-sub">For the bride who wants to look softly, unmistakably, unforgettably like herself — on the morning that matters most.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="pricing.html">Get your estimate</a>
+          <a class="btn btn-ghost" href="portfolio.html">View the portfolio</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="ph img " style="background-image:url('assets/hero.jpg')"></div>
+        <div class="hero-badge">Calm and curated</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="wrap">
+      <div class="trust-item">We travel to you on your wedding day</div>
+      <div class="trust-item">Trials by appointment, <b>in&nbsp;studio</b></div>
+      <div class="trust-item">Personal, from your trial to the final touch-up</div>
+    </div>
+  </section>
+
+  <section class="section statement">
+    <div class="wrap">
+      <span class="eyebrow reveal">Who we are</span>
+      <h2 class="reveal d1" style="margin-top:1rem;">The artist a bride chooses when she wants to feel most like herself.</h2>
+      <p class="reveal d2">We are a team of nine bridal artists, working as one quiet, capable presence on the morning of your wedding. Since 2018 we have made it our craft to enhance — never to mask — so that when you look in the mirror, you simply see yourself, on your most radiant day.</p>
+      <p class="reveal d2">From your trial to the final touch-up, every detail is personal, calm, and considered. We count it a blessing to play a small part in your day.</p>
+      <div class="quote-block reveal d3">
+        <p class="lead">“Beauty begins the moment you decide to be yourself.”</p>
+        <cite>— Coco Chanel</cite>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:linear-gradient(180deg,var(--blush),var(--ivory));">
+    <div class="wrap">
+      <div class="services-head">
+        <div><span class="eyebrow reveal">What we do</span><h2 class="reveal d1" style="margin-top:1rem;">Flawless. Elegant.<br>Unforgettable.</h2></div>
+        <p class="reveal d2" style="max-width:34ch;color:#5c5048;">Every look is tailored to you — your features, your dress, the feeling of your day.</p>
+      </div>
+      <div class="cards">
+        <article class="card reveal"><div class="card-media"><div class="ph img " style="background-image:url('assets/s1.jpg')"></div></div><div class="card-body"><h3>Bridal Makeup</h3><p>A soft, lasting look built on flawless skin — from natural radiance to timeless glamour, made to last from “I do” to the last dance.</p><a class="card-link" href="services.html">Explore makeup <span>→</span></a></div></article>
+        <article class="card reveal d1"><div class="card-media"><div class="ph img " style="background-image:url('assets/s2.jpg')"></div></div><div class="card-body"><h3>Bridal Hair</h3><p>From romantic soft curls to elegant updos, styled to complement your features, your dress and the spirit of your celebration.</p><a class="card-link" href="services.html">Explore hair <span>→</span></a></div></article>
+        <article class="card reveal d2"><div class="card-media"><div class="ph img " style="background-image:url('assets/s3.jpg')"></div></div><div class="card-body"><h3>The Whole Party</h3><p>Bridesmaids, mothers, flower girls and guests — beautifully cohesive, individually considered, calmly choreographed on the day.</p><a class="card-link" href="pricing.html">Explore packages <span>→</span></a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section team">
+    <div class="wrap team-grid">
+      <div class="team-collage reveal"><div class="ph img " style="background-image:url('assets/t1.jpg')"></div><div class="ph img " style="background-image:url('assets/t2.jpg')"></div><div class="ph img " style="background-image:url('assets/t3.jpg')"></div><div class="ph img " style="background-image:url('assets/t4.jpg')"></div></div>
+      <div class="team-copy">
+        <span class="eyebrow reveal">The Lustique team</span>
+        <h2 class="reveal d1">Nine artists.<br>One quiet morning at a time.</h2>
+        <p class="reveal d2">Lustique is no longer one pair of hands — it is a team of nine bridal artists who move as one. Whoever joins you on your day brings the same calm, the same standard, the same care.</p>
+        <p class="reveal d2">We allocate the right artists for your wedding so you never have to. You simply get the Lustique standard, every time.</p>
+        <div class="stat-row reveal d3">
+          <div class="stat"><b>9</b><span>Artists</span></div>
+          <div class="stat"><b>40+</b><span>Years combined</span></div>
+          <div class="stat"><b>2018</b><span>Since</span></div>
+        </div>
+        <div style="margin-top:2rem;" class="reveal d3"><a class="btn btn-ghost" href="team.html">Meet the team</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pricing">
+    <div class="wrap">
+      <div class="pricing-head">
+        <span class="eyebrow reveal">Transparent pricing</span>
+        <h2 class="reveal d1">Know your investment before you enquire.</h2>
+        <p class="reveal d2">No vague ranges, no “request a quote to find out.” See clear starting prices, then build a personalised estimate in under a minute.</p>
+      </div>
+      <div class="price-grid">
+        <div class="price reveal"><small>Solo Bride · trial + day</small><div class="amt"><sup>from R</sup>2 690</div></div>
+        <div class="price reveal d1"><small>Bridesmaid · makeup</small><div class="amt"><sup>R</sup>550</div></div>
+        <div class="price reveal d2"><small>Mother · makeup</small><div class="amt"><sup>R</sup>500</div></div>
+        <div class="price reveal d3"><small>Bridal hair</small><div class="amt"><sup>from R</sup>495</div></div>
+      </div>
+      <div class="pricing-foot">
+        <p>Free travel within 30 km of our La Montagne studio · R7/km beyond · prices scale with hair length</p>
+        <a class="btn btn-light reveal" href="pricing.html">See full pricing &amp; estimate →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section testi">
+    <div class="wrap">
+      <div class="stars reveal">★★★★★</div>
+      <div class="testi-slider reveal d1">
+        <div class="testi-slide active"><p class="lead">“They felt less like a vendor and more like the calmest people in the room. I looked like me — just the version I always hoped to be on my wedding day.”</p><cite>A Lustique Bride</cite></div>
+        <div class="testi-slide"><p class="lead">“My whole bridal party was ready, relaxed and glowing. Not one moment of stress all morning.”</p><cite>A Lustique Bride</cite></div>
+        <div class="testi-slide"><p class="lead">“The trial sold me. They listened, adjusted, and on the day my makeup lasted from the first photo to the last dance.”</p><cite>A Lustique Bride</cite></div>
+      </div>
+      <div class="testi-dots"></div>
+      <div class="sub reveal d2">— sample reviews shown · real bride testimonials &amp; video to be added from our Google profile</div>
+    </div>
+  </section>
+
+  <section class="section" style="background:linear-gradient(180deg,var(--ivory),var(--blush));">
+    <div class="wrap res-grid">
+      <div class="res-copy">
+        <span class="eyebrow reveal">For your big day</span>
+        <h2 class="reveal d1">Free guides, from us to you.</h2>
+        <p class="reveal d2">A 30-day bridal skin-prep plan, a wedding-morning timeline, and more — thoughtful resources to help your day feel calm and considered. Yours, free.</p>
+        <a class="btn btn-primary reveal d2" href="guides.html">Browse the guides</a>
+      </div>
+      <div class="res-media reveal d1"><div class="ph img " style="background-image:url('assets/res.jpg')"></div></div>
+    </div>
+  </section>
+  
+  <section class="section cta-band">
+    <div class="wrap">
+      <span class="eyebrow reveal">Let’s begin</span>
+      <h2 class="reveal d1" style="margin-top:1rem;">Tell us about your day.</h2>
+      <p class="reveal d2">Share a few details and we’ll send a personalised quote — usually within 24 hours, often sooner.</p>
+      <a class="btn btn-primary reveal d2" href="quote.html">Get a Quote</a>
+    </div>
+  </section>
+</BaseLayout>
