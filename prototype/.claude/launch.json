@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "lustique",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4322", "--directory", "/Users/pieter/Documents/Layer Zero Studios/Opus Project Folder/Lustique/prototype"],
+      "port": 4322
+    }
+  ]
+}

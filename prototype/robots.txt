@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://lustiqueco.co.za/sitemap.xml

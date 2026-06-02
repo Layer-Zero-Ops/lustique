@@ -1,0 +1,189 @@
+# Lustique Cosmetology — Phase 1 Setup Runbook
+
+**Status:** Ready to execute
+**Last updated:** 2026-06-01
+**Who does what:** **Pieter** does account creation + anything needing a credit card or a password (marked 🧍). **Claude** does config files, the Worker, the Sheet structure, and can pair on the technical bits (marked 🤖). Steps with both = we do it together.
+
+> **Golden rule for this whole phase: do not cancel the GoDaddy email plan until the new mailbox has sent *and* received cleanly for 48 hours.** Email is the business's lifeline — we move it with a belt and braces.
+
+---
+
+## Order of operations (why this sequence)
+
+```
+1. Cloudflare DNS migration   ← move DNS first, preserving ALL existing records (mail keeps working)
+2. Holding page              ← put a simple "coming soon" up (site is currently 404)
+3. Google Workspace          ← create, verify domain (TXT now lives in Cloudflare)
+4. Email migration           ← copy old mail in via IMAP, THEN cut MX over to Google
+5. Brevo                     ← authenticate sending (merge SPF with Google!)
+6. Analytics                 ← GA4 + Cloudflare Web Analytics
+7. CRM (Google Sheet)        ← build sheet + service account for the Worker
+8. Dev plumbing              ← repo, Node, wrangler, API tokens
+```
+
+Each phase below is independently checkpointed. Don't start the next until the current one verifies.
+
+---
+
+## Phase 1 — Move DNS to Cloudflare 🧍🤖
+
+**Goal:** Cloudflare runs DNS; GoDaddy stays the registrar only. No mail or site disruption.
+
+**Time:** ~30 min work + up to 24h propagation (usually <1h).
+
+- [ ] 🧍 Create a free Cloudflare account at dash.cloudflare.com
+- [ ] 🧍 **Add a site** → enter `lustiqueco.co.za` → choose the **Free** plan
+- [ ] 🤖 Cloudflare auto-scans and imports existing GoDaddy DNS records. **We review the imported list together** against what's currently at GoDaddy. **Critical:** confirm these are all present and correct before continuing:
+  - [ ] Current **MX records** (the existing GoDaddy email routing) — must carry over exactly, or mail breaks
+  - [ ] Any **A / CNAME** records (website, `www`, subdomains)
+  - [ ] Any existing **TXT** (SPF, verification) records
+  - [ ] **Manually add anything Cloudflare missed** before the nameserver switch
+- [ ] 🧍 In GoDaddy: change the domain's **nameservers** to the two Cloudflare gave you (e.g. `xxx.ns.cloudflare.com`)
+- [ ] ⏳ Wait for Cloudflare to show the domain as **Active** (email arrives when ready)
+- [ ] ✅ **Checkpoint:** send a test email to `info@lustiqueco.co.za` from a personal account → it should still arrive (proves MX survived the move). Existing site (if any) still resolves.
+
+> **Set SSL/TLS mode to "Full (strict)"** in Cloudflare once Pages is connected (Phase 8). For now, leave defaults.
+
+---
+
+## Phase 2 — Holding page 🤖
+
+**Goal:** the domain shows something gracious instead of a 404 while we build.
+
+**Time:** ~20 min.
+
+- [ ] 🤖 I'll ship a single elegant "Something beautiful is coming" page (on-brand: ivory, Cormorant, the logo) to a Cloudflare Pages project
+- [ ] 🤖 Point the apex domain + `www` at it
+- [ ] ✅ **Checkpoint:** visiting lustiqueco.co.za shows the holding page over HTTPS
+
+> This also proves the Pages + DNS + SSL path end-to-end *before* we depend on it for the real site.
+
+---
+
+## Phase 3 — Google Workspace 🧍
+
+**Goal:** branded mailboxes on `lustiqueco.co.za`, ready to receive migrated mail.
+
+**Time:** ~30 min. **Cost:** Business Starter ≈ $6/user/mo (needs a card).
+
+- [ ] 🧍 Sign up at workspace.google.com → **Business Starter**
+- [ ] 🧍 Use `lustiqueco.co.za` as the domain
+- [ ] 🧍 Google gives a **TXT verification record** → 🤖 we add it in **Cloudflare DNS** → 🧍 click Verify
+- [ ] 🧍 Create the mailbox(es):
+  - [ ] `info@lustiqueco.co.za` (primary — replaces the existing one)
+  - [ ] *(optional)* `zandeline@`, `bookings@`, `team@` — decide if wanted
+- [ ] ⛔ **Do NOT change MX records yet.** Mail still flows to GoDaddy at this point. We migrate data first.
+- [ ] ✅ **Checkpoint:** you can log into mail.google.com as `info@lustiqueco.co.za` (empty inbox for now)
+
+---
+
+## Phase 4 — Email migration (the careful one) 🧍🤖
+
+**Goal:** old mail copied into Workspace, then live mail cut over to Google with no gap.
+
+**Time:** migration runs hours-to-a-day in the background; cutover ~30 min + 48h watch.
+
+### 4A — Copy existing mail in (no disruption)
+- [ ] 🧍 Gather the GoDaddy IMAP details: server (e.g. `imap.secureserver.net` or `mail.lustiqueco.co.za`), port **993 / SSL**, username `info@lustiqueco.co.za`, the mailbox password
+- [ ] 🧍 Workspace Admin → **Data → Data migration** → source **IMAP** → enter the GoDaddy details → start
+- [ ] ⏳ Let it finish (large/old inboxes take a while). This only *copies* — live mail is untouched.
+- [ ] ✅ **Checkpoint:** folders, sent items, and attachments all present in the new mailbox
+
+### 4B — Cut MX over to Google 🤖
+- [ ] 🤖 In Cloudflare DNS, **replace** the GoDaddy MX records with Google's:
+  - `1 ASPMX.L.GOOGLE.COM`
+  - `5 ALT1.ASPMX.L.GOOGLE.COM` · `5 ALT2.ASPMX.L.GOOGLE.COM`
+  - `10 ALT3.ASPMX.L.GOOGLE.COM` · `10 ALT4.ASPMX.L.GOOGLE.COM`
+- [ ] 🤖 Add SPF (TXT, root): `v=spf1 include:_spf.google.com ~all`  *(we'll extend this for Brevo in Phase 5 — do not create a second SPF record later)*
+- [ ] 🧍🤖 Enable **DKIM** in Workspace admin → it generates a TXT record → 🤖 add it in Cloudflare
+- [ ] 🤖 Add DMARC (TXT, `_dmarc`): `v=DMARC1; p=none; rua=mailto:info@lustiqueco.co.za`
+
+### 4C — Verify, then decommission
+- [ ] ✅ Inbound test: have a friend email `info@` → arrives in **Google**
+- [ ] ✅ Outbound test: send from `info@` to an external address → arrives with **no "via gmail" warning** (proves DKIM)
+- [ ] ✅ Run clean for **48 hours**
+- [ ] 🧍 **Only now:** cancel the GoDaddy email subscription (keep the domain registration with GoDaddy)
+
+---
+
+## Phase 5 — Brevo (email marketing) 🧍🤖
+
+**Goal:** Brevo can send on behalf of the domain without landing in spam.
+
+**Time:** ~30 min + DNS propagation.
+
+- [ ] 🧍 Create a free Brevo account (300 sends/day free tier)
+- [ ] 🧍 Add and verify the sender domain `lustiqueco.co.za`
+- [ ] 🤖 Add Brevo's **DKIM** + tracking records in Cloudflare DNS (Brevo provides them)
+- [ ] 🤖 **Merge SPF — do not add a second SPF record.** Edit the existing one to:
+  `v=spf1 include:_spf.google.com include:spf.brevo.com ~all`
+- [ ] ✅ **Checkpoint:** Brevo shows the domain as authenticated (green); send a Brevo test → lands in inbox, not spam
+- [ ] 🤖 *(build phase)* I'll wire the three flows from PLAN.md §9 (lead nurture, booked bride, past bride) once content is ready
+
+---
+
+## Phase 6 — Analytics 🧍🤖
+
+**Time:** ~20 min.
+
+- [ ] 🧍 Create a **GA4** property → grab the Measurement ID (`G-XXXXXXX`)
+- [ ] 🤖 I'll install GA4 + the custom events (estimator funnel, downloads, WhatsApp clicks) during the build
+- [ ] 🤖 Enable **Cloudflare Web Analytics** (free, cookieless) on the Pages project — complements GA4 for privacy-blocking visitors
+- [ ] ✅ **Checkpoint:** GA4 realtime shows your own visit to the holding page
+
+---
+
+## Phase 7 — CRM (Google Sheet + service account) 🧍🤖
+
+**Goal:** the Sheet that the quote form writes into automatically.
+
+**Time:** ~45 min.
+
+- [ ] 🤖 I'll create the Sheet with the exact tabs + columns from PLAN.md §8 (`Leads`, `Bookings`, `Artists`, `Email templates`, `Analytics`)
+- [ ] 🧍 Create a free **Google Cloud project** → enable the **Sheets API**
+- [ ] 🧍🤖 Create a **service account** → download its JSON key (this is the credential the Worker uses to write rows)
+- [ ] 🧍 **Share the Sheet** with the service account's email address (Editor)
+- [ ] 🔒 The JSON key goes into Cloudflare Worker **secrets** — never into the repo or any file we commit
+- [ ] ✅ **Checkpoint:** I run a one-line test write from the Worker → a row appears in `Leads`
+
+---
+
+## Phase 8 — Dev plumbing 🧍🤖
+
+**Goal:** the repo + tools so I can build and you can review/deploy.
+
+**Time:** ~30 min.
+
+- [ ] 🧍 Confirm installed locally: **Node LTS** (`node -v` ≥ 20), **git**
+- [ ] 🧍 Create a **GitHub repo** (private) — enables Cloudflare Pages CI + per-PR previews so you review live URLs
+- [ ] 🤖 I scaffold the Astro project + Worker into `Lustique/site` and `Lustique/worker` per PLAN.md §10
+- [ ] 🧍 Create a **Cloudflare API token** (Pages + Workers scope) for deploys
+- [ ] 🤖 Connect the GitHub repo to Cloudflare Pages (auto-deploy on push, preview per branch)
+- [ ] ✅ **Checkpoint:** a test commit triggers a Cloudflare preview deploy you can open
+
+---
+
+## What unblocks the build after this
+
+Once Phases 1–8 verify, the only remaining inputs for the **build** are content, not plumbing:
+
+- **Pieter:** the Wix content export (existing copy + the live form's field list + any stored testimonials/images)
+- **Zandeline:** hero tagline · logo call · photography (curate vs. shoot) · the 8 new-service prices · the travel mechanic · the 9 artist bios · video testimonials (within a month) · Pinterest boards
+
+The build (Astro site, estimator, quote form, Worker, Brevo flows) can start in parallel with content arriving — copy and components don't need the Wix export; only the *migration* of existing copy does.
+
+---
+
+## Costs incurred in this phase
+
+| Item | When | Cost |
+|---|---|---|
+| Cloudflare (DNS, Pages, Workers, Analytics) | now | Free |
+| Google Workspace Business Starter | Phase 3 | ≈ $6/user/mo |
+| Brevo | Phase 5 | Free tier |
+| GA4 | Phase 6 | Free |
+| Google Cloud (Sheets API, service account) | Phase 7 | Free (well within limits) |
+| GitHub | Phase 8 | Free (private repos) |
+| **New recurring total** | | **≈ $6/mo** (one Workspace seat) |
+
+Everything else is free tier. This *replaces* Wix Premium + Wix email, so the net monthly cost goes **down**.

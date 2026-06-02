@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Get a Quote — Lustique Co.</title>
+<meta name="description" content="Tell us about your wedding day and receive a personalised bridal hair and makeup quote within 24 hours." />
+<link rel="canonical" href="https://lustiqueco.co.za/quote.html" />
+<link rel="icon" href="assets/logo.png" type="image/png" />
+<link rel="apple-touch-icon" href="assets/logo.png" />
+<link rel="alternate icon" href="favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Lustique Co." />
+<meta property="og:title" content="Get a Quote — Lustique Co." />
+<meta property="og:description" content="Tell us about your wedding day and receive a personalised bridal hair and makeup quote within 24 hours." />
+<meta property="og:image" content="https://lustiqueco.co.za/assets/hero.jpg" />
+<meta property="og:url" content="https://lustiqueco.co.za/quote.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#A0625E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"HealthAndBeautyBusiness","name":"Lustique Co.","description":"Bridal hair and makeup artistry in Pretoria — a team of nine artists serving Gauteng and beyond.","image":"https://lustiqueco.co.za/assets/hero.jpg","@id":"https://lustiqueco.co.za/","url":"https://lustiqueco.co.za/","telephone":"+27-67-925-3894","priceRange":"R500–R8000","address":{"@type":"PostalAddress","streetAddress":"242 Frangipani Street, La Montagne","addressLocality":"Pretoria","addressRegion":"Gauteng","postalCode":"0184","addressCountry":"ZA"},"areaServed":["Gauteng","Limpopo","Mpumalanga","North West"],"founder":{"@type":"Person","name":"Zandeline Kemp"},"sameAs":["https://www.instagram.com/lustique_cosmetology/","https://www.facebook.com/LustiqueCosmetology","https://www.tiktok.com/@lustique_co"]}</script>
+
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="topbar"><span>Now booking 2026 &amp; 2027 weddings · Book hair &amp; makeup for 4+ and the least-expensive look is on us</span></div>
+  <header class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="Lustique Co." onerror="this.style.display='none'" /><span class="brand-name">Lustique Co.</span></a>
+      <nav><ul class="nav-links" id="navLinks">
+        <li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="team.html">The Team</a></li><li><a href="portfolio.html">Portfolio</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="guides.html">Guides</a></li><li><a href="blog.html">Journal</a></li>
+      </ul></nav>
+      <div class="nav-cta">
+        <a class="btn btn-primary" href="quote.html">Get a Quote</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </header>
+<main id="main">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <section class="page-hero">
+    <span class="eyebrow">Get a Quote</span>
+    <h1>Tell us about your day.</h1>
+    <p>Every bride deserves a look as unique as her story. Build your estimate below — it updates live — then send it through for a personalised quote within 24 hours.</p>
+  </section>
+  <section class="section"><div class="wrap form-wrap">
+    <div class="estimate-box" id="estimateBar">
+      <div><div style="font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;">Your live estimate</div><div id="estimateSub" style="opacity:.85;font-size:.88rem;">Updates as you fill in the form</div></div>
+      <div class="amt" id="estimateAmount">from R 2 890</div>
+    </div>
+    <form id="quoteForm">
+      <input type="text" name="company" id="hp_company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+      <div class="form-step reveal"><h3>Your occasion</h3><p class="step-sub">The estimator is tuned for weddings — choose another occasion and the pricing switches.</p>
+        <div class="field"><label>What are we creating for?</label><select id="occasion"><option value="wedding">Wedding</option><option value="matric">Matric farewell</option><option value="editorial">Editorial / photoshoot</option><option value="engagement">Engagement / maternity shoot</option><option value="corporate">Corporate / event</option><option value="pageant">Pageant / stage</option><option value="lessons">Group lesson (6+)</option></select></div>
+      </div>
+      <div class="form-step reveal"><h3>About you</h3><p class="step-sub">Let’s start with the star of the show.</p>
+        <div class="field-row"><div class="field"><label>First name</label><input placeholder="Your name"></div><div class="field"><label>Last name</label><input placeholder="Surname"></div></div>
+        <div class="field-row"><div class="field"><label>Email</label><input type="email" placeholder="you@email.com"></div><div class="field"><label>Mobile / WhatsApp</label><input placeholder="067 000 0000"></div></div>
+        <div class="field"><label>How did you hear about us?</label><select><option>Instagram</option><option>Google</option><option>A friend / past bride</option><option>TikTok</option><option>Facebook</option><option>Other</option></select></div>
+      </div>
+      <div class="form-step reveal"><h3>Your big day</h3><p class="step-sub">So we can reserve the date and work out the travel from our La Montagne studio.</p>
+        <div class="field-row"><div class="field"><label>Wedding date</label><input type="date"></div><div class="field"><label>Province</label><select id="provinceInput"><option>Gauteng</option><option>Limpopo</option><option>Mpumalanga</option><option>North West</option><option>Other / outside SA</option></select></div></div>
+        <div class="field"><label>Venue name <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(optional)</span></label><input placeholder="e.g. Red Ivory Estate"></div>
+        <div class="field"><label>Town / area</label><input id="townInput" placeholder="e.g. Hartbeespoort"></div>
+        <button type="button" class="btn btn-ghost" id="checkTravel" style="padding:.7em 1.4em;">Find venue on map</button>
+        <div id="venueMap" style="height:300px;border-radius:14px;margin-top:1rem;display:none;"></div>
+        <p class="note" id="mapHint" style="display:none;margin-top:.5rem;">📍 Drag the pin to your exact venue for the most accurate travel cost.</p>
+        <p class="note" id="travelResult" style="margin:.85rem 0 0;">We travel from La Montagne, Pretoria — free within 30 km, then R7/km round trip.</p>
+        <div class="field" id="bandWrap" style="display:none;margin-top:1rem;"><label>Distance band (fallback)</label><select id="travelBand"><option value="studio">Within 30 km (free)</option><option value="mid">30–80 km</option><option value="far">80–150 km</option><option value="veryfar">150–200 km</option><option value="destination">Over 200 km / destination</option></select></div>
+      </div>
+      <div class="form-step reveal"><h3>The bride</h3><p class="step-sub">Your trial and wedding-day hair &amp; makeup — lashes and a touch-up kit included.</p>
+        <div class="field"><label>Bride’s hair length</label><select id="brideHairLen"><option value="short">Short (chin)</option><option value="medium" selected>Medium (shoulder)</option><option value="long">Long (mid-back)</option><option value="xlong">X-Long (pantyline)</option></select></div>
+      </div>
+      <div class="form-step reveal"><h3>Your bridal party</h3><p class="step-sub">Makeup and hair are priced separately — so tell us exactly who needs what, and only pay for that.</p>
+        <p style="font-weight:600;color:var(--mocha);margin:.2rem 0 .6rem;">Bridesmaids</p>
+        <div class="field-row"><div class="field"><label>Need makeup</label><select id="bmMakeup"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></div><div class="field"><label>Need hair</label><select id="bmHair"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></div></div>
+        <p style="font-weight:600;color:var(--mocha);margin:1rem 0 .6rem;">Mothers (of the bride &amp; groom)</p>
+        <div class="field-row"><div class="field"><label>Need makeup</label><select id="momMakeup"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div><div class="field"><label>Need hair</label><select id="momHair"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>
+        <p style="font-weight:600;color:var(--mocha);margin:1rem 0 .6rem;">Flower girls</p>
+        <div class="field-row"><div class="field"><label>Age</label><select id="fgAge"><option value="under">Under 12</option><option value="over">12 and over</option></select></div><div class="field"><label>Need makeup</label><select id="fgMakeup"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>
+        <div class="field"><label>Flower girls — need hair</label><select id="fgHair"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+        <p style="font-weight:600;color:var(--mocha);margin:1rem 0 .6rem;">Other guests</p>
+        <div class="field-row"><div class="field"><label>Need makeup</label><select id="guestMakeup"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div><div class="field"><label>Need hair</label><select id="guestHair"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div></div>
+        <div class="field" style="margin-top:1rem;"><label>Most of the party’s hair length <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(for your estimate — we’ll confirm each at your trial)</span></label><select id="partyHairLen"><option value="short">Short (chin)</option><option value="medium" selected>Medium (shoulder)</option><option value="long">Long (mid-back)</option><option value="xlong">X-Long (pantyline)</option></select></div>
+      </div>
+      <div class="form-step reveal"><h3>Your vision</h3><p class="step-sub">The more you share, the more we can tailor your day.</p>
+        <div class="field"><label>Style</label><select><option>Natural &amp; soft</option><option>Soft glam</option><option>Full glam</option><option>Editorial</option><option>Boho</option><option>Not sure yet — guide me</option></select></div>
+        <div class="field"><label>Inspiration link (Pinterest / Instagram)</label><input placeholder="Paste a link — optional"></div>
+        <div class="field"><label>Anything else we should know? (skin notes, timings, special requests)</label><textarea rows="4" placeholder="Tell us anything that helps us prepare…"></textarea></div>
+        <label style="display:flex;align-items:center;gap:.6rem;font-size:.92rem;color:#5c5048;margin:.2rem 0 1.3rem;"><input type="checkbox" id="promoToggle" checked style="width:auto;"> Apply the “book 4+, least-expensive look free” offer to my estimate</label>
+        <a class="btn btn-primary" href="thank-you.html" style="width:100%;justify-content:center;">Send my enquiry</a>
+        <p class="note center" style="margin-top:1rem;">Prototype form — not yet connected. In the live build this writes to the CRM, emails your confirmation, and starts your quote. <strong>Blessings, The Lustique Cosmetology Team.</strong></p>
+      </div>
+    </form>
+  </div></section>
+</main>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <div class="foot-brand">
+        <span class="brand-name" style="font-size:1.6rem;">Lustique Co.</span>
+        <p>Bridal hair &amp; makeup artistry for the bride who wants to feel most like herself.</p>
+        <p style="margin-top:.7rem;font-size:.8rem;opacity:.62;">Serving brides across Gauteng, Limpopo, Mpumalanga &amp; North West — and destination weddings.</p>
+      </div>
+      <div><h4>Explore</h4><ul>
+        <li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li>
+        <li><a href="team.html">The Team</a></li><li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="pricing.html">Pricing</a></li><li><a href="faq.html">FAQ</a></li>
+        <li><a href="blog.html">Journal</a></li>
+      </ul></div>
+      <div><h4>Contact</h4><ul>
+        <li><a href="tel:+27679253894">067 925 3894</a></li>
+        <li><a href="mailto:info@lustiqueco.co.za">info@lustiqueco.co.za</a></li>
+        <li>242 Frangipani Street,<br>La Montagne, Pretoria</li>
+        <li><a href="contact.html">Contact us &amp; map →</a></li>
+      </ul></div>
+      <div><h4>Follow</h4><ul>
+        <li><a href="https://www.instagram.com/lustique_cosmetology/">Instagram</a></li>
+        <li><a href="https://www.facebook.com/LustiqueCosmetology">Facebook</a></li>
+        <li><a href="https://www.tiktok.com/@lustique_co">TikTok</a></li>
+        <li><a href="guides.html">Free Guides</a></li>
+      </ul></div>
+    </div>
+    <div class="wrap foot-bottom">
+      <span>© 2026 Lustique Co. · Pretoria · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></span>
+      <span class="foot-sign">Blessings, The Lustique Cosmetology Team</span>
+    </div>
+  </footer>
+<div class="cookie-banner" id="cookieBanner" hidden>
+  <p>We use a few cookies to make the site work and to understand how it’s used. <a href="privacy.html">Privacy &amp; cookies</a>.</p>
+  <div class="cookie-actions"><button class="btn btn-ghost" id="cookieDecline">Decline</button><button class="btn btn-primary" id="cookieAccept">Accept</button></div>
+</div>
+<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+<script src="site.js"></script>
+<script src="estimator.js"></script>
+</body>
+</html>
