@@ -33,6 +33,8 @@ function readInput(): EstimateInput {
     fgAge: val("fgAge", "under") === "under" ? "under" : "over",
     fgMakeup: num("fgMakeup"), fgHair: num("fgHair"),
     guestMakeup: num("guestMakeup"), guestHair: num("guestHair"),
+    evMakeup: num("evMakeup"), evHair: num("evHair"), evHairLen: val("evHairLen", "medium") as HairLength,
+    lessonsAttending: num("lessonsAttending"),
     promoOn: (el("promoToggle") as HTMLInputElement | null)?.checked ?? true,
     travel: travelOverride
       ? { cost: travelOverride.cost, destination: travelOverride.destination }
@@ -48,6 +50,7 @@ function renderEstimate() {
   const sub = el("estimateSub");
   if (sub) {
     if (r.destination) sub.textContent = "Over 200 km — we’ll send a personalised destination quote";
+    else if (r.occasion === "lessons") sub.textContent = `${r.heads} attending · group lesson`;
     else if (r.occasion !== "wedding") sub.textContent = `${r.heads} ${r.heads === 1 ? "face" : "faces"} · approximate event estimate`;
     else sub.textContent = `${r.heads} ${r.heads === 1 ? "look" : "looks"} · incl. trial & touch-ups`;
   }
@@ -121,12 +124,24 @@ async function lookupTravel() {
   }
 }
 
+// Show only the field groups that fit the chosen occasion.
+function applyOccasion() {
+  const occ = val("occasion", "wedding");
+  const show = (id: string, on: boolean) => { const e = el(id); if (e) e.style.display = on ? "" : "none"; };
+  show("weddingFields", occ === "wedding");
+  show("eventFields", occ !== "wedding" && occ !== "lessons");
+  show("lessonsFields", occ === "lessons");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("quoteForm");
   if (!form) return;
   form.addEventListener("input", renderEstimate);
   form.addEventListener("change", renderEstimate);
+  const occ = el("occasion");
+  if (occ) occ.addEventListener("change", applyOccasion);
   const btn = el("checkTravel");
   if (btn) btn.addEventListener("click", lookupTravel);
+  applyOccasion();
   renderEstimate();
 });

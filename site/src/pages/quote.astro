@@ -38,6 +38,7 @@ const desc = "Tell us about your wedding day and receive a personalised bridal h
         <p class="note" id="travelResult" style="margin:.85rem 0 0;">We travel from La Montagne, Pretoria — free within 30 km, then R7/km round trip.</p>
         <div class="field" id="bandWrap" style="display:none;margin-top:1rem;"><label>Distance band (fallback)</label><select id="travelBand"><option value="studio">Within 30 km (free)</option><option value="mid">30–80 km</option><option value="far">80–150 km</option><option value="veryfar">150–200 km</option><option value="destination">Over 200 km / destination</option></select></div>
       </div>
+      <div id="weddingFields">
       <div class="form-step reveal"><h3>The bride</h3><p class="step-sub">Your trial and wedding-day hair &amp; makeup — lashes and a touch-up kit included.</p>
         <div class="field"><label>Bride’s hair length</label><select id="brideHairLen"><option value="short">Short (chin)</option><option value="medium" selected>Medium (shoulder)</option><option value="long">Long (mid-back)</option><option value="xlong">X-Long (pantyline)</option></select></div>
       </div>
@@ -52,6 +53,14 @@ const desc = "Tell us about your wedding day and receive a personalised bridal h
         <p style="font-weight:600;color:var(--mocha);margin:1rem 0 .6rem;">Other guests</p>
         <div class="field-row"><div class="field"><label>Need makeup</label><select id="guestMakeup"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div><div class="field"><label>Need hair</label><select id="guestHair"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div></div>
         <div class="field" style="margin-top:1rem;"><label>Most of the party’s hair length <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(for your estimate — we’ll confirm each at your trial)</span></label><select id="partyHairLen"><option value="short">Short (chin)</option><option value="medium" selected>Medium (shoulder)</option><option value="long">Long (mid-back)</option><option value="xlong">X-Long (pantyline)</option></select></div>
+      </div>
+      </div>
+      <div class="form-step reveal" id="eventFields" style="display:none;"><h3>Who needs makeup &amp; hair?</h3><p class="step-sub">Tell us how many people need each — only pay for what you book.</p>
+        <div class="field-row"><div class="field"><label>Need makeup</label><select id="evMakeup"><option>0</option><option selected>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div><div class="field"><label>Need hair</label><select id="evHair"><option selected>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div></div>
+        <div class="field"><label>Hair length <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(for any hair styling)</span></label><select id="evHairLen"><option value="short">Short (chin)</option><option value="medium" selected>Medium (shoulder)</option><option value="long">Long (mid-back)</option><option value="xlong">X-Long (pantyline)</option></select></div>
+      </div>
+      <div class="form-step reveal" id="lessonsFields" style="display:none;"><h3>Your group lesson</h3><p class="step-sub">Learn to do your own makeup with us — groups of 6 or more, at Bez Ranch or on location.</p>
+        <div class="field"><label>How many attending? <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(6 minimum · R700pp, R600pp for 10+)</span></label><select id="lessonsAttending"><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>12</option><option>15</option><option>20</option></select></div>
       </div>
       <div class="form-step reveal"><h3>Your vision</h3><p class="step-sub">The more you share, the more we can tailor your day.</p>
         <div class="field"><label>Style</label><select><option>Natural &amp; soft</option><option>Soft glam</option><option>Full glam</option><option>Editorial</option><option>Boho</option><option>Not sure yet — guide me</option></select></div>

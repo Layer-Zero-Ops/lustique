@@ -13,6 +13,10 @@ export interface EstimateInput {
   momMakeup: number; momHair: number;
   fgAge: "under" | "over"; fgMakeup: number; fgHair: number;
   guestMakeup: number; guestHair: number;
+  // Non-wedding events (matric/editorial/engagement/corporate/pageant) — simple face counts:
+  evMakeup?: number; evHair?: number; evHairLen?: HairLength;
+  // Group lessons (6+ attendees):
+  lessonsAttending?: number;
   promoOn: boolean;
   /** Either a named band, or an exact override from the map-pin route. */
   travel: { band: TravelBand } | { cost: number; destination: boolean };

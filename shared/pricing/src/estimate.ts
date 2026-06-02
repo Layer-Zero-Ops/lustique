@@ -1,4 +1,4 @@
-import { PRICING, RATE_PER_KM, FREE_KM, EVENT_BASE } from "./constants";
+import { PRICING, RATE_PER_KM, FREE_KM, EVENT_BASE, LESSONS } from "./constants";
 import type { EstimateInput, EstimateResult, HairLength } from "./types";
 
 /** Round-trip travel cost: free within 30 km, else round-trip distance × R7. */
@@ -20,14 +20,24 @@ export function computeEstimate(input: EstimateInput): EstimateResult {
   const pl = input.partyHairLen;
   const trav = resolveTravel(input.travel);
 
-  // Non-wedding occasions — per-face event pricing.
-  if (input.occasion !== "wedding") {
-    const eventBase = EVENT_BASE[input.occasion] ?? 750;
-    const faces = 1 + input.bmMakeup + input.momMakeup + input.fgMakeup + input.guestMakeup;
-    const hairCount = input.bmHair + input.momHair + input.fgHair + input.guestHair;
-    let total = eventBase * Math.max(1, faces) + hairCount * PRICING.hairAdult[pl];
+  // Group lessons — tiered per-person (PRICING.md §7), minimum group of 6.
+  if (input.occasion === "lessons") {
+    const n = Math.max(LESSONS.minGroup, input.lessonsAttending ?? 0);
+    const pp = n < LESSONS.threshold ? LESSONS.perPersonUnder10 : LESSONS.perPerson10Plus;
+    let total = n * pp;
     if (!trav.destination) total += trav.cost;
-    return { total, heads: Math.max(1, faces), destination: trav.destination, occasion: input.occasion };
+    return { total, heads: n, destination: trav.destination, occasion: input.occasion };
+  }
+
+  // Other non-wedding events — makeup faces × base + hair faces × event-hair.
+  if (input.occasion !== "wedding") {
+    const base = EVENT_BASE[input.occasion] ?? 750;
+    const evMakeup = input.evMakeup ?? 0;
+    const evHair = input.evHair ?? 0;
+    const len = input.evHairLen ?? pl;
+    let total = base * evMakeup + PRICING.hairAdult[len] * evHair;
+    if (!trav.destination) total += trav.cost;
+    return { total, heads: Math.max(1, evMakeup, evHair), destination: trav.destination, occasion: input.occasion };
   }
 
   // Wedding — full bridal logic.

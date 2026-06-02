@@ -38,10 +38,22 @@ describe("computeEstimate — wedding", () => {
   });
 });
 
-describe("computeEstimate — events", () => {
-  it("solo matric face = event base", () => {
-    const r = computeEstimate({ ...base, occasion: "matric" });
-    expect(r.total).toBe(750);
+describe("computeEstimate — events (occasion-aware)", () => {
+  it("matric: makeup faces × base + hair × event-hair (medium)", () => {
+    const r = computeEstimate({ ...base, occasion: "matric", evMakeup: 3, evHair: 2 });
+    expect(r.total).toBe(750 * 3 + 495 * 2); // 3240
     expect(r.occasion).toBe("matric");
+  });
+  it("corporate: a single face = base", () => {
+    expect(computeEstimate({ ...base, occasion: "corporate", evMakeup: 1 }).total).toBe(650);
+  });
+});
+
+describe("computeEstimate — group lessons (tiered, PRICING.md §7)", () => {
+  it("under 10 attendees = R700pp", () => {
+    expect(computeEstimate({ ...base, occasion: "lessons", lessonsAttending: 6 }).total).toBe(6 * 700);
+  });
+  it("10+ attendees = R600pp", () => {
+    expect(computeEstimate({ ...base, occasion: "lessons", lessonsAttending: 12 }).total).toBe(12 * 600);
   });
 });

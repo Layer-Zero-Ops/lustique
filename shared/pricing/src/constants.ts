@@ -26,3 +26,6 @@ export const DEST_KM = 200;
 export const EVENT_BASE: Record<string, number> = {
   matric: 750, editorial: 750, engagement: 650, corporate: 650, pageant: 950, lessons: 600,
 };
+
+// Group lessons (PRICING.md §7): R700pp under 10 attendees, R600pp for 10+, minimum group of 6.
+export const LESSONS = { perPersonUnder10: 700, perPerson10Plus: 600, threshold: 10, minGroup: 6 };
