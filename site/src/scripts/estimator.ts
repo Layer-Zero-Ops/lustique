@@ -14,6 +14,7 @@ const STUDIO = { lat: -25.7986, lng: 28.3127 }; // 242 Frangipani St, La Montagn
 const FREE_KM = 30;
 
 let travelOverride: { km: number; cost: number; destination: boolean } | null = null;
+let foundLabel = "";
 let map: any, marker: any;
 
 const el = (id: string) => document.getElementById(id);
@@ -69,8 +70,8 @@ function routeFrom(lat: number, lng: number) {
       travelOverride = { km, cost: destination ? 0 : travelForKm(km), destination };
       if (res) {
         if (destination) res.textContent = `📍 ≈ ${km} km away — a destination wedding. We’ll tailor travel + accommodation in your quote.`;
-        else if (km <= FREE_KM) res.textContent = `📍 ≈ ${km} km from our studio — travel is free (within 30 km). ✓`;
-        else res.textContent = `📍 ≈ ${km} km from our studio — travel ≈ R ${rand(travelOverride.cost)} round trip. ✓`;
+        else if (km <= FREE_KM) res.textContent = `📍 ${foundLabel ? foundLabel + " · " : ""}≈ ${km} km from our studio — travel is free (within 30 km). ✓ Drag the pin if this isn’t your exact venue.`;
+        else res.textContent = `📍 ${foundLabel ? foundLabel + " · " : ""}≈ ${km} km from our studio — travel ≈ R ${rand(travelOverride.cost)} round trip. ✓ Drag the pin if this isn’t your exact venue.`;
       }
       setBand(false);
       renderEstimate();
@@ -102,18 +103,23 @@ function initMap(center: { lat: number; lng: number }) {
 }
 
 async function lookupTravel() {
+  const venue = val("venueInput").trim();
   const town = val("townInput").trim();
   const res = el("travelResult");
-  if (!town) { if (res) res.textContent = "Add your town or area above, then we’ll show it on the map."; return; }
-  if (res) res.textContent = "Finding your location…";
+  if (!venue && !town) { if (res) res.textContent = "Add your venue or town above, then we’ll find it on the map."; return; }
+  if (res) res.textContent = "Finding your venue…";
   const prov = val("provinceInput");
-  const q = town + (prov && prov.indexOf("Other") === -1 ? ", " + prov : "") + ", South Africa";
+  const provPart = prov && prov.indexOf("Other") === -1 ? prov : "";
+  // Lean on the venue name first (most specific) — a lodge can be far from its nearest town.
+  const q = [venue, town, provPart, "South Africa"].filter(Boolean).join(", ");
   try {
     const g = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=1&lat=${STUDIO.lat}&lon=${STUDIO.lng}&lang=en`).then((r) => r.json());
     const f = g.features && g.features[0];
     if (!f) throw new Error("no geocode");
     const c = f.geometry.coordinates;
     const center = { lat: c[1], lng: c[0] };
+    const p = f.properties || {};
+    foundLabel = [p.name, p.city || p.county, p.state].filter(Boolean).join(", ");
     initMap(center);
     routeFrom(center.lat, center.lng);
   } catch {
