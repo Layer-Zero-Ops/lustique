@@ -1,0 +1,11 @@
+{
+  "name": "lustique",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": ["shared/*", "site"],
+  "scripts": {
+    "dev": "npm run dev --workspace site",
+    "build": "npm run build --workspace site",
+    "test": "npm run test --workspace @lustique/pricing"
+  }
+}
