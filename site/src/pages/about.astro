@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Photo from "../components/Photo.astro";
 const title = "About — Lustique Co.";
 const desc = "Our story: a team of nine bridal artists, 40+ years combined, crafting calm, tailored bridal beauty since 2018.";
 ---
@@ -12,7 +13,7 @@ const desc = "Our story: a team of nine bridal artists, 40+ years combined, craf
     <p>Tailored hair and makeup for the bride who wants to feel like the most radiant version of herself.</p>
   </section>
   <section class="section"><div class="wrap team-grid">
-    <div class="res-media"><div class="ph img " style="background-image:url('assets/hero.jpg')"></div></div>
+    <div class="res-media"><Photo src="hero.jpg" alt="A Lustique bride" /></div>
     <div class="team-copy">
       <span class="eyebrow">Since 2018</span>
       <h2 style="margin:1rem 0 1.2rem;">More than makeup —<br>a feeling of calm.</h2>
@@ -21,7 +22,7 @@ const desc = "Our story: a team of nine bridal artists, 40+ years combined, craf
       <p>We are a faith-led, family-spirited studio, and we count it a blessing to play a small part in one of the most important days of your life.</p>
     </div>
   </div></section>
-  <section class="section statement" style="background:linear-gradient(180deg,var(--blush),var(--ivory));"><div class="wrap">
+  <section class="section statement" style="background:var(--ivory);"><div class="wrap">
     <p class="lead reveal" style="max-width:30ch;margin-inline:auto;">“Beauty begins the moment you decide to be yourself.”</p>
     <cite class="reveal d1" style="display:block;margin-top:1rem;font-style:normal;font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--burgundy);">— Coco Chanel</cite>
   </div></section>

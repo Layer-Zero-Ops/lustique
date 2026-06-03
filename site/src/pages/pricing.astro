@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Photo from "../components/Photo.astro";
 const title = "Pricing — Lustique Co.";
 const desc = "Transparent, component-based bridal pricing. Solo bride from R2,690. Free travel within 30 km of La Montagne, Pretoria.";
 ---
@@ -11,9 +12,9 @@ const desc = "Transparent, component-based bridal pricing. Solo bride from R2,69
     <h1>Know your investment<br>before you enquire.</h1>
     <p>Transparent, component-based pricing — clear starting points with no hidden surprises. Final quotes are tailored to your day.</p>
   </section>
-  <section class="section" style="background:linear-gradient(180deg,var(--ivory),var(--blush));"><div class="wrap" style="max-width:980px;">
+  <section class="section" style="background:var(--ivory);"><div class="wrap" style="max-width:980px;">
     <div class="team-grid reveal" style="margin-bottom:3.2rem;align-items:center;">
-      <div class="res-media"><div class="ph img " style="background-image:url('assets/res.jpg')"></div></div>
+      <div class="res-media"><Photo src="res.jpg" alt="Bridal styling by Lustique Co." /></div>
       <div><span class="eyebrow">Simple &amp; honest</span><h2 style="margin:1rem 0 1rem;font-size:clamp(1.9rem,3.2vw,2.6rem);">Priced by what you actually need.</h2><p style="color:#5c5048;">Makeup and hair are charged per person and by hair length — so your quote reflects your day, not a one-size package. Here’s where it starts.</p></div>
     </div>
     <table class="ptable reveal"><caption>The Bride — trial + wedding day</caption>

@@ -1,24 +1,21 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Photo from "../components/Photo.astro";
 const title = "Lustique Co. — Bridal Hair & Makeup Artistry | Pretoria & Beyond";
 const desc = "Bridal hair and makeup for the bride who wants to feel most like herself. Nine artists, 40+ years combined, serving Pretoria, Gauteng and beyond since 2018.";
 ---
 <BaseLayout slug="index.html" title={title} desc={desc}>
 
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <span class="eyebrow">Bridal Hair &amp; Makeup Artistry · Pretoria &amp; Beyond</span>
-        <h1 class="display">Feel most like <em>yourself</em>.</h1>
-        <p class="hero-sub">For the bride who wants to look softly, unmistakably, unforgettably like herself — on the morning that matters most.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="pricing.html">Get your estimate</a>
-          <a class="btn btn-ghost" href="portfolio.html">View the portfolio</a>
-        </div>
-      </div>
-      <div class="hero-media">
-        <div class="ph img " style="background-image:url('assets/hero.jpg')"></div>
-        <div class="hero-badge">Calm and curated</div>
+  <section class="hero" aria-label="Lustique Co. — bridal hair and makeup artistry">
+    <img class="hero-img" src="assets/hero.jpg" alt="A Lustique bride on her wedding morning — softly lit, hair styled, looking quietly radiant" fetchpriority="high" />
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <span class="eyebrow">Bridal Hair &amp; Makeup Artistry · Pretoria &amp; Beyond</span>
+      <h1 class="hero-title display">Feel most like <em>yourself</em>.</h1>
+      <p class="hero-sub">For the bride who wants to look softly, unmistakably, unforgettably like herself — on the morning that matters most.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="pricing.html">Get your estimate</a>
+        <a class="btn btn-light" href="portfolio.html">View the portfolio</a>
       </div>
     </div>
   </section>
@@ -44,23 +41,23 @@ const desc = "Bridal hair and makeup for the bride who wants to feel most like h
     </div>
   </section>
 
-  <section class="section" style="background:linear-gradient(180deg,var(--blush),var(--ivory));">
+  <section class="section" style="background:var(--ivory);">
     <div class="wrap">
       <div class="services-head">
         <div><span class="eyebrow reveal">What we do</span><h2 class="reveal d1" style="margin-top:1rem;">Flawless. Elegant.<br>Unforgettable.</h2></div>
         <p class="reveal d2" style="max-width:34ch;color:#5c5048;">Every look is tailored to you — your features, your dress, the feeling of your day.</p>
       </div>
       <div class="cards">
-        <article class="card reveal"><div class="card-media"><div class="ph img " style="background-image:url('assets/s1.jpg')"></div></div><div class="card-body"><h3>Bridal Makeup</h3><p>A soft, lasting look built on flawless skin — from natural radiance to timeless glamour, made to last from “I do” to the last dance.</p><a class="card-link" href="services.html">Explore makeup <span>→</span></a></div></article>
-        <article class="card reveal d1"><div class="card-media"><div class="ph img " style="background-image:url('assets/s2.jpg')"></div></div><div class="card-body"><h3>Bridal Hair</h3><p>From romantic soft curls to elegant updos, styled to complement your features, your dress and the spirit of your celebration.</p><a class="card-link" href="services.html">Explore hair <span>→</span></a></div></article>
-        <article class="card reveal d2"><div class="card-media"><div class="ph img " style="background-image:url('assets/s3.jpg')"></div></div><div class="card-body"><h3>The Whole Party</h3><p>Bridesmaids, mothers, flower girls and guests — beautifully cohesive, individually considered, calmly choreographed on the day.</p><a class="card-link" href="pricing.html">Explore packages <span>→</span></a></div></article>
+        <article class="card reveal"><div class="card-media"><Photo src="s1.jpg" alt="Bridal makeup by Lustique Co." /></div><div class="card-body"><h3>Bridal Makeup</h3><p>A soft, lasting look built on flawless skin — from natural radiance to timeless glamour, made to last from “I do” to the last dance.</p><a class="card-link" href="services.html">Explore makeup <span>→</span></a></div></article>
+        <article class="card reveal d1"><div class="card-media"><Photo src="s2.jpg" alt="Bridal hair styling by Lustique Co." /></div><div class="card-body"><h3>Bridal Hair</h3><p>From romantic soft curls to elegant updos, styled to complement your features, your dress and the spirit of your celebration.</p><a class="card-link" href="services.html">Explore hair <span>→</span></a></div></article>
+        <article class="card reveal d2"><div class="card-media"><Photo src="s3.jpg" alt="A bridal party styled by Lustique Co." /></div><div class="card-body"><h3>The Whole Party</h3><p>Bridesmaids, mothers, flower girls and guests — beautifully cohesive, individually considered, calmly choreographed on the day.</p><a class="card-link" href="pricing.html">Explore packages <span>→</span></a></div></article>
       </div>
     </div>
   </section>
 
   <section class="section team">
     <div class="wrap team-grid">
-      <div class="team-collage reveal"><div class="ph img " style="background-image:url('assets/t1.jpg')"></div><div class="ph img " style="background-image:url('assets/t2.jpg')"></div><div class="ph img " style="background-image:url('assets/t3.jpg')"></div><div class="ph img " style="background-image:url('assets/t4.jpg')"></div></div>
+      <div class="team-collage reveal"><Photo src="t1.jpg" alt="A Lustique artist styling a bride" /><Photo src="t2.jpg" alt="Bridal hair detail" /><Photo src="t3.jpg" alt="Bridal makeup detail" /><Photo src="t4.jpg" alt="A Lustique bride on her wedding morning" /></div>
       <div class="team-copy">
         <span class="eyebrow reveal">The Lustique team</span>
         <h2 class="reveal d1">Nine artists.<br>One quiet morning at a time.</h2>
@@ -109,7 +106,7 @@ const desc = "Bridal hair and makeup for the bride who wants to feel most like h
     </div>
   </section>
 
-  <section class="section" style="background:linear-gradient(180deg,var(--ivory),var(--blush));">
+  <section class="section" style="background:var(--ivory);">
     <div class="wrap res-grid">
       <div class="res-copy">
         <span class="eyebrow reveal">For your big day</span>
@@ -117,7 +114,7 @@ const desc = "Bridal hair and makeup for the bride who wants to feel most like h
         <p class="reveal d2">A 30-day bridal skin-prep plan, a wedding-morning timeline, and more — thoughtful resources to help your day feel calm and considered. Yours, free.</p>
         <a class="btn btn-primary reveal d2" href="guides.html">Browse the guides</a>
       </div>
-      <div class="res-media reveal d1"><div class="ph img " style="background-image:url('assets/res.jpg')"></div></div>
+      <div class="res-media reveal d1"><Photo src="res.jpg" alt="A calm Lustique bridal morning" /></div>
     </div>
   </section>
   

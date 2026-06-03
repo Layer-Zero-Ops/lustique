@@ -28,7 +28,7 @@ const desc = "Tell us about your wedding day and receive a personalised bridal h
         <div class="field-row"><div class="field"><label>Email</label><input type="email" placeholder="you@email.com"></div><div class="field"><label>Mobile / WhatsApp</label><input placeholder="067 000 0000"></div></div>
         <div class="field"><label>How did you hear about us?</label><select><option>Instagram</option><option>Google</option><option>A friend / past bride</option><option>TikTok</option><option>Facebook</option><option>Other</option></select></div>
       </div>
-      <div class="form-step reveal"><h3>Your big day</h3><p class="step-sub">So we can reserve the date and work out the travel from our La Montagne studio.</p>
+      <div class="form-step reveal" id="weddingDayFields"><h3>Your big day</h3><p class="step-sub">So we can reserve the date and work out the travel from our La Montagne studio.</p>
         <div class="field-row"><div class="field"><label>Wedding date</label><input type="date"></div><div class="field"><label>Province</label><select id="provinceInput"><option>Gauteng</option><option>Limpopo</option><option>Mpumalanga</option><option>North West</option><option>Other / outside SA</option></select></div></div>
         <div class="field"><label>Venue name <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(helps us pin you precisely)</span></label><input id="venueInput" placeholder="e.g. Red Ivory Estate"></div>
         <div class="field"><label>Town / area</label><input id="townInput" placeholder="e.g. Hartbeespoort"></div>
@@ -56,17 +56,19 @@ const desc = "Tell us about your wedding day and receive a personalised bridal h
       </div>
       </div>
       <div class="form-step reveal" id="eventFields" style="display:none;"><h3>Who needs makeup &amp; hair?</h3><p class="step-sub">Tell us how many people need each — only pay for what you book.</p>
+        <div class="field"><label>Date of your event</label><input type="date"></div>
         <div class="field-row"><div class="field"><label>Need makeup</label><select id="evMakeup"><option>0</option><option selected>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div><div class="field"><label>Need hair</label><select id="evHair"><option selected>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div></div>
         <div class="field"><label>Hair length <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(for any hair styling)</span></label><select id="evHairLen"><option value="short">Short (chin)</option><option value="medium" selected>Medium (shoulder)</option><option value="long">Long (mid-back)</option><option value="xlong">X-Long (pantyline)</option></select></div>
       </div>
       <div class="form-step reveal" id="lessonsFields" style="display:none;"><h3>Your group lesson</h3><p class="step-sub">Learn to do your own makeup with us — groups of 6 or more, at Bez Ranch or on location.</p>
+        <div class="field"><label>Preferred date</label><input type="date"></div>
         <div class="field"><label>How many attending? <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(6 minimum · R700pp, R600pp for 10+)</span></label><select id="lessonsAttending"><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>12</option><option>15</option><option>20</option></select></div>
       </div>
       <div class="form-step reveal"><h3>Your vision</h3><p class="step-sub">The more you share, the more we can tailor your day.</p>
         <div class="field"><label>Style</label><select><option>Natural &amp; soft</option><option>Soft glam</option><option>Full glam</option><option>Editorial</option><option>Boho</option><option>Not sure yet — guide me</option></select></div>
         <div class="field"><label>Inspiration link (Pinterest / Instagram)</label><input placeholder="Paste a link — optional"></div>
         <div class="field"><label>Anything else we should know? (skin notes, timings, special requests)</label><textarea rows="4" placeholder="Tell us anything that helps us prepare…"></textarea></div>
-        <label style="display:flex;align-items:center;gap:.6rem;font-size:.92rem;color:#5c5048;margin:.2rem 0 1.3rem;"><input type="checkbox" id="promoToggle" checked style="width:auto;"> Apply the “book 4+, least-expensive look free” offer to my estimate</label>
+        <div id="promoRow"><label style="display:flex;align-items:center;gap:.6rem;font-size:.92rem;color:#5c5048;margin:.2rem 0 1.3rem;"><input type="checkbox" id="promoToggle" checked style="width:auto;"> Apply the “book 4+, least-expensive look free” offer to my estimate</label></div>
         <a class="btn btn-primary" href="thank-you.html" style="width:100%;justify-content:center;">Send my enquiry</a>
         <p class="note center" style="margin-top:1rem;">Prototype form — not yet connected. In the live build this writes to the CRM, emails your confirmation, and starts your quote. <strong>Blessings, The Lustique Cosmetology Team.</strong></p>
       </div>

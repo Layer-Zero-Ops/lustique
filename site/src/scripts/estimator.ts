@@ -25,8 +25,17 @@ const rand = (x: number) => x.toLocaleString("en-ZA").replace(/,/g, " ");
 const setBand = (show: boolean) => { const w = el("bandWrap"); if (w) w.style.display = show ? "" : "none"; };
 
 function readInput(): EstimateInput {
+  const occasion = val("occasion", "wedding") as Occasion;
+  // Only weddings collect a venue. Events & lessons settle travel in the personal quote,
+  // so it's always 0 in their live estimate (no stale wedding travel leaks in either).
+  const travel: EstimateInput["travel"] =
+    occasion !== "wedding"
+      ? { band: "studio" as TravelBand }
+      : travelOverride
+        ? { cost: travelOverride.cost, destination: travelOverride.destination }
+        : { band: val("travelBand", "studio") as TravelBand };
   return {
-    occasion: val("occasion", "wedding") as Occasion,
+    occasion,
     brideHairLen: val("brideHairLen", "medium") as HairLength,
     partyHairLen: val("partyHairLen", "medium") as HairLength,
     bmMakeup: num("bmMakeup"), bmHair: num("bmHair"),
@@ -37,9 +46,7 @@ function readInput(): EstimateInput {
     evMakeup: num("evMakeup"), evHair: num("evHair"), evHairLen: val("evHairLen", "medium") as HairLength,
     lessonsAttending: num("lessonsAttending"),
     promoOn: (el("promoToggle") as HTMLInputElement | null)?.checked ?? true,
-    travel: travelOverride
-      ? { cost: travelOverride.cost, destination: travelOverride.destination }
-      : { band: val("travelBand", "studio") as TravelBand },
+    travel,
   };
 }
 
@@ -133,10 +140,14 @@ async function lookupTravel() {
 // Show only the field groups that fit the chosen occasion.
 function applyOccasion() {
   const occ = val("occasion", "wedding");
+  const isWedding = occ === "wedding";
+  const isLessons = occ === "lessons";
   const show = (id: string, on: boolean) => { const e = el(id); if (e) e.style.display = on ? "" : "none"; };
-  show("weddingFields", occ === "wedding");
-  show("eventFields", occ !== "wedding" && occ !== "lessons");
-  show("lessonsFields", occ === "lessons");
+  show("weddingDayFields", isWedding);            // date + venue + travel — weddings only
+  show("weddingFields", isWedding);               // the bride + bridal party
+  show("eventFields", !isWedding && !isLessons);  // events: faces + hair
+  show("lessonsFields", isLessons);               // group lessons: attendee count
+  show("promoRow", isWedding);                    // the "book 4+ free" offer only computes for weddings
 }
 
 document.addEventListener("DOMContentLoaded", () => {

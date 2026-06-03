@@ -1,5 +1,6 @@
 /* LUSTIQUE CO. — shared behavior (no markup injection).
    Header/footer are baked into each page by build.mjs. */
+document.documentElement.classList.add("js"); // gate JS-only enhancements (photo blur-up) so content always shows without/with-stale JS
 document.addEventListener("DOMContentLoaded", () => {
   // sticky nav shadow
   const nav = document.getElementById("nav");
@@ -99,4 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const reset = () => { clearInterval(timer); timer = setInterval(() => go(i + 1), 6000); };
     }
   }
+
+  // photo blur-up — fade/sharpen each real <img.ph-img> once it loads (handles cached images)
+  document.querySelectorAll("img.ph-img").forEach((img) => {
+    const ph = img.closest(".ph");
+    if (!ph) return;
+    if (img.complete && img.naturalWidth > 0) { ph.classList.add("loaded"); return; }
+    img.addEventListener("load", () => ph.classList.add("loaded"), { once: true });
+    img.addEventListener("error", () => ph.classList.add("img-error"), { once: true });
+  });
 });
