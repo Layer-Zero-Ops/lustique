@@ -37,17 +37,32 @@ document.addEventListener("DOMContentLoaded", () => {
     toTop.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
   }
 
-  // portfolio filters — category + artist, combined
+  // portfolio filters — category + artist, combined, with a graceful empty state
   const catRow = document.getElementById("galleryFilters");
   const artRow = document.getElementById("artistFilters");
   if (catRow || artRow) {
     let activeCat = "all", activeArtist = "all";
+    const empty = document.getElementById("galleryEmpty");
+    const emptyName = empty && empty.querySelector("[data-empty-name]");
     const apply = () => {
+      let shown = 0;
       document.querySelectorAll(".gitem").forEach(it => {
         const okCat = activeCat === "all" || it.dataset.cat === activeCat;
         const okArt = activeArtist === "all" || it.dataset.artist === activeArtist;
-        it.classList.toggle("hide", !(okCat && okArt));
+        const show = okCat && okArt;
+        it.classList.toggle("hide", !show);
+        if (show) shown++;
       });
+      // no matches (e.g. an artist whose photos aren't up yet) → show the panel
+      if (empty) {
+        if (shown === 0) {
+          const active = artRow && artRow.querySelector("button.active");
+          if (emptyName && active) emptyName.textContent = active.textContent.trim();
+          empty.hidden = false;
+        } else {
+          empty.hidden = true;
+        }
+      }
     };
     const wire = (row, set) => {
       if (!row) return;
@@ -62,6 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     wire(catRow, (val) => (activeCat = val));
     wire(artRow, (val) => (activeArtist = val));
+    // "View all work" in the empty panel resets to All (reuses the click handler)
+    if (empty && artRow) {
+      const reset = empty.querySelector("[data-reset]");
+      if (reset) reset.addEventListener("click", () => {
+        const all = artRow.querySelector('button[data-filter="all"]');
+        if (all) all.click();
+      });
+    }
   }
 
   // FAQ accordion

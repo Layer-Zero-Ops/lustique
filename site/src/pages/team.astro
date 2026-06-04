@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { ARTISTS } from "../data/team";
 const title = "The Team — Lustique Co.";
 const desc = "Meet the nine bridal artists of Lustique Co. — 40+ years of combined experience.";
 ---
@@ -13,61 +14,14 @@ const desc = "Meet the nine bridal artists of Lustique Co. — 40+ years of comb
   </section>
   <section class="section"><div class="wrap">
     <div class="artist-grid">
-      
-        <div class="artist reveal">
+      {ARTISTS.map((a, i) => (
+        <div class={`artist reveal${["", " d1", " d2"][i % 3]}`}>
           <div class="ph"></div>
-          <h3>Zandeline</h3>
-          <div class="role">Founder</div>
-          <p>A bridal artist since 2018 — Lustique Co. began with her.</p>
+          <h3>{a.name}</h3>
+          <div class="role">{a.role}</div>
+          <p>{a.blurb}</p>
         </div>
-        <div class="artist reveal d1">
-          <div class="ph"></div>
-          <h3>Monique</h3>
-          <div class="role">Bridal Artist</div>
-          <p>Bridal-specialised artist. A short bio is on the way.</p>
-        </div>
-        <div class="artist reveal d2">
-          <div class="ph"></div>
-          <h3>Marize</h3>
-          <div class="role">Bridal Artist</div>
-          <p>Bridal-specialised artist. A short bio is on the way.</p>
-        </div>
-        <div class="artist reveal">
-          <div class="ph"></div>
-          <h3>Jana</h3>
-          <div class="role">Bridal Artist</div>
-          <p>Bridal-specialised artist. A short bio is on the way.</p>
-        </div>
-        <div class="artist reveal d1">
-          <div class="ph"></div>
-          <h3>Janeke</h3>
-          <div class="role">Bridal Artist</div>
-          <p>Bridal-specialised artist. A short bio is on the way.</p>
-        </div>
-        <div class="artist reveal d2">
-          <div class="ph"></div>
-          <h3>Elria</h3>
-          <div class="role">Bridal Artist</div>
-          <p>Bridal-specialised artist. A short bio is on the way.</p>
-        </div>
-        <div class="artist reveal">
-          <div class="ph"></div>
-          <h3>Maroné</h3>
-          <div class="role">Bridal Artist</div>
-          <p>Bridal-specialised artist. A short bio is on the way.</p>
-        </div>
-        <div class="artist reveal d1">
-          <div class="ph"></div>
-          <h3>René</h3>
-          <div class="role">Bridal Artist</div>
-          <p>Bridal-specialised artist. A short bio is on the way.</p>
-        </div>
-        <div class="artist reveal d2">
-          <div class="ph"></div>
-          <h3>Samantha</h3>
-          <div class="role">Bridal Artist</div>
-          <p>Bridal-specialised artist. A short bio is on the way.</p>
-        </div>
+      ))}
     </div>
     <p class="note center" style="margin-top:2.4rem;max-width:60ch;margin-inline:auto;">Each artist’s portfolio will live as a highlight on our Instagram. We allocate the right artists for your wedding by date and party size — so you simply get the Lustique standard, every time. <em>Artist photos &amp; bios coming soon.</em></p>
   </div></section>

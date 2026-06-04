@@ -1,23 +1,41 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { ARTISTS, GALLERY, imageCountByArtist } from "../data/team";
 const title = "Portfolio — Lustique Co.";
-const desc = "Real brides, real mornings — a gallery of recent bridal hair and makeup work.";
+const desc = "Real brides, real mornings — a gallery of recent bridal hair and makeup work, filterable by artist.";
 ---
 <BaseLayout slug="portfolio.html" title={title} desc={desc}>
 
-  
+
   <section class="page-hero">
     <span class="eyebrow">Portfolio</span>
     <h1>Real work. Real mornings.</h1>
-    <p>Every image here is real work — never stock, never AI. As each of our artists adds her portfolio, you’ll be able to browse them here too.</p>
+    <p>Every image here is real work — never stock, never AI. Filter by artist to see each woman’s hand; as each of our nine shares hers, her gallery fills in here.</p>
   </section>
   <section class="section"><div class="wrap">
-    <div class="gallery" id="gallery">
-      <img class="gitem" src="assets/hero.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/s2.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/t1.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/res.jpg" alt="Bridal party hair & makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/s1.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/t3.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/s3.jpg" alt="Bridal party hair & makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/t2.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/t4.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g10.jpg" alt="Bridal party hair & makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g11.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g12.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g13.jpg" alt="Bridal party hair & makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g14.jpg" alt="Bridal makeup — Lustique Co., Pretoria" loading="lazy"><img class="gitem" src="assets/g15.jpg" alt="Bridal hair — Lustique Co., Pretoria" loading="lazy">
+
+    <div class="filters" id="artistFilters" role="group" aria-label="Filter portfolio by artist">
+      <button type="button" class="active" data-filter="all">All artists</button>
+      {ARTISTS.map((a) => (
+        <button type="button" data-filter={a.id} data-count={imageCountByArtist[a.id]}>{a.name}</button>
+      ))}
     </div>
+
+    <div class="gallery" id="gallery">
+      {GALLERY.map((img) => (
+        <img class="gitem" src={img.src} alt={img.alt} data-cat={img.cat} data-artist={img.artist} loading="lazy" />
+      ))}
+    </div>
+
+    <div class="gallery-empty" id="galleryEmpty" hidden>
+      <p class="lead"><span data-empty-name>This artist</span>’s portfolio is coming soon.</p>
+      <p class="note">We add each artist’s work as she shares it. In the meantime, browse our full gallery.</p>
+      <button type="button" class="btn btn-ghost" data-reset>View all work</button>
+    </div>
+
     <p class="note center" style="margin-top:2rem;">Every photograph here is our own real work — never stock, never AI. Per-artist galleries arrive as each of our nine artists shares hers.</p>
   </div></section>
-  
+
   <section class="section cta-band">
     <div class="wrap">
       <span class="eyebrow reveal">Let’s begin</span>
