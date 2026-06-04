@@ -1,0 +1,137 @@
+/* /quote — submit handler: gather the FULL enquiry → POST /api/enquiry → thank-you page.
+   The endpoint is the Worker (worker/), routed same-origin at /api/* in production.
+   Before the backend is deployed there's no /api/enquiry, so it surfaces a soft error
+   instead of failing silently. Pricing/occasion logic lives in estimator.ts. */
+
+type Detail = { label: string; value: string };
+
+const val = (id: string): string => {
+  const el = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
+  return el ? el.value.trim() : "";
+};
+const numv = (id: string): number => parseInt(val(id), 10) || 0;
+
+const OCCASION: Record<string, string> = {
+  wedding: "Wedding", matric: "Matric farewell", editorial: "Editorial / photoshoot",
+  engagement: "Engagement / maternity shoot", corporate: "Corporate / event",
+  pageant: "Pageant / stage", lessons: "Group lesson (6+)",
+};
+const LEN: Record<string, string> = { short: "Short", medium: "Medium", long: "Long", xlong: "X-Long" };
+const lenLabel = (id: string): string => LEN[val(id) || "medium"] ?? "Medium";
+
+/** Human-readable party composition — only the roles she actually booked. */
+function partySummary(): string {
+  const out: string[] = [];
+  const role = (label: string, mk: string, hr: string) => {
+    const m = numv(mk), h = numv(hr);
+    if (m || h) out.push(`${label}: ${m} makeup / ${h} hair`);
+  };
+  role("Bridesmaids", "bmMakeup", "bmHair");
+  role("Mothers", "momMakeup", "momHair");
+  role(`Flower girls (${val("fgAge") === "over" ? "12+" : "under 12"})`, "fgMakeup", "fgHair");
+  role("Guests", "guestMakeup", "guestHair");
+  return out.join("; ") || "Bride only";
+}
+
+/** Party hair as she entered it — the 4 buckets if expanded, else one length × the head count. */
+function partyHairSummary(): string {
+  const many = document.getElementById("partyHairMany");
+  const expanded = !!many && (many as HTMLElement).style.display !== "none";
+  if (expanded) {
+    const buckets = (["Short", "Medium", "Long", "Xlong"] as const)
+      .map((k) => { const n = numv("len" + k); return n ? `${n} ${LEN[k.toLowerCase()] ?? k}` : ""; })
+      .filter(Boolean);
+    return buckets.length ? buckets.join(", ") : "—";
+  }
+  const heads = numv("bmHair") + numv("momHair") + numv("guestHair");
+  return heads ? `${heads} × ${lenLabel("partyOneLen")}` : "—";
+}
+
+function collect() {
+  const occasion = val("occasion") || "wedding";
+  const date =
+    occasion === "wedding" ? val("weddingDate")
+    : occasion === "lessons" ? val("lessonsDate")
+    : val("eventDate");
+
+  const details: Detail[] = [];
+  const add = (label: string, value: string) => { if (value && value !== "—") details.push({ label, value }); };
+
+  add("Heard via", val("source"));
+
+  if (occasion === "wedding") {
+    add("Province", val("provinceInput"));
+    add("Venue", val("venueInput"));
+    add("Bride hair", lenLabel("brideHairLen"));
+    add("Party", partySummary());
+    add("Party hair", partyHairSummary());
+    if (numv("fgHair")) add("Flower-girl hair", `${numv("fgHair")} × ${lenLabel("fgHairLen")}`);
+    const promo = (document.getElementById("promoToggle") as HTMLInputElement | null)?.checked;
+    add("Offer", promo ? "Apply ‘book 4+, cheapest look free’" : "Not applied");
+  } else if (occasion === "lessons") {
+    add("Attending", val("lessonsAttending"));
+  } else {
+    add("People", `${numv("evMakeup")} makeup / ${numv("evHair")} hair`);
+    if (numv("evHair")) add("Hair length", lenLabel("evHairLen"));
+  }
+  add("Style", val("style"));
+  add("Inspiration", val("inspo"));
+
+  return {
+    name: [val("fName"), val("lName")].filter(Boolean).join(" "),
+    email: val("email"),
+    phone: val("phone"),
+    occasion: OCCASION[occasion] ?? occasion,
+    date,
+    town: val("townInput"),
+    estimate: (document.getElementById("estimateAmount")?.textContent ?? "").trim(),
+    message: val("message"),
+    details,
+    hp_company: val("hp_company"), // honeypot — the Worker drops it if filled
+  };
+}
+
+const btn = document.getElementById("sendEnquiry") as HTMLButtonElement | null;
+const statusEl = document.getElementById("enquiryStatus");
+const say = (msg: string) => { if (statusEl) statusEl.textContent = msg; };
+
+btn?.addEventListener("click", async () => {
+  const data = collect();
+  if (!data.name || !data.email) {
+    say("Please add your name and email so we can reply.");
+    return;
+  }
+
+  const label = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Sending…";
+  say("");
+
+  // Don't leave a bride staring at "Sending…" forever on a flaky connection.
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 15000);
+  try {
+    const res = await fetch("/api/enquiry", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data),
+      signal: ctrl.signal,
+    });
+    const out = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+    if (res.ok && out.ok) {
+      window.location.href = "thank-you.html";
+      return;
+    }
+    say(out.error || "Something went wrong — please email info@lustiqueco.co.za and we'll jump on it.");
+  } catch (e) {
+    const slow = e instanceof DOMException && e.name === "AbortError";
+    say(slow
+      ? "That took too long to send — please email info@lustiqueco.co.za and we'll jump on it."
+      : "We couldn't send that — check your connection, or email info@lustiqueco.co.za.");
+  } finally {
+    clearTimeout(timer);
+  }
+
+  btn.disabled = false;
+  btn.textContent = label;
+});

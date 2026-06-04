@@ -38,6 +38,8 @@ These are the objective rules the estimator uses. Display them with a small diag
 | **X-Long** | Mid-back to pantyline |
 | **Beyond X-Long** | Longer than pantyline → **Price on request** (estimator shows "we'll confirm this one personally") |
 
+> **Estimator input (2026-06-04):** the bridal party's hair is captured as a **length distribution**, not one length for everyone — *"of those needing hair, how many Short / Medium / Long / X-Long?"* The form defaults to a single length (collapsed) and, on "some have different lengths?", expands to four count buckets that should sum to the party members needing hair (a live "placed of N" counter reconciles them). Each head is then priced at its own length, so the quote is exact and independent of party size. Flower-girls-under-12 keep the cheaper hair table on their own length. The 4+ "cheapest look free" promo is unchanged — it still frees the single least-expensive person; the estimator hands the distribution's lengths to heads deterministically (short→x-long) when reconstructing per-person costs.
+
 ---
 
 ## 3. Component price list (locked — from 2026–2027 PDF)

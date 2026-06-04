@@ -5,7 +5,7 @@
    ============================================================ */
 import {
   computeEstimate, travelForKm, DEST_KM,
-  type EstimateInput, type HairLength, type Occasion, type TravelBand,
+  type EstimateInput, type HairBuckets, type HairLength, type Occasion, type TravelBand,
 } from "@lustique/pricing";
 
 declare const L: any; // Leaflet global (loaded via the CDN <script> on the quote page)
@@ -24,6 +24,61 @@ const val = (id: string, d = "") => { const e = fld(id); return e ? e.value : d;
 const rand = (x: number) => x.toLocaleString("en-ZA").replace(/,/g, " ");
 const setBand = (show: boolean) => { const w = el("bandWrap"); if (w) w.style.display = show ? "" : "none"; };
 
+// Adult heads needing hair = the bridesmaid + mother + guest hair counts.
+const adultHairHeads = (): number => num("bmHair") + num("momHair") + num("guestHair");
+
+const partyExpanded = (): boolean => {
+  const many = el("partyHairMany");
+  return !!many && (many as HTMLElement).style.display !== "none";
+};
+
+/** Party hair as a length distribution: the 4 buckets when expanded, else one length × the head count. */
+function readPartyHair(): HairBuckets {
+  if (partyExpanded()) {
+    return { short: num("lenShort"), medium: num("lenMedium"), long: num("lenLong"), xlong: num("lenXlong") };
+  }
+  const buckets: HairBuckets = { short: 0, medium: 0, long: 0, xlong: 0 };
+  buckets[val("partyOneLen", "medium") as HairLength] = adultHairHeads();
+  return buckets;
+}
+
+/** Keep the "N looks need hair" count + the "placed of N" reconciliation note honest as the form changes. */
+function updateLengthHint(): void {
+  const n = adultHairHeads();
+  const headCount = el("hairHeadCount");
+  if (headCount) headCount.textContent = String(n);
+  const counter = el("lengthsCounter");
+  if (!counter || !partyExpanded()) return;
+  const placed = num("lenShort") + num("lenMedium") + num("lenLong") + num("lenXlong");
+  if (placed === n) counter.textContent = `✓ all ${n} placed`;
+  else if (placed < n) counter.textContent = `${placed} of ${n} placed — ${n - placed} to go`;
+  else counter.textContent = `${placed} placed — ${placed - n} more than need hair`;
+}
+
+function expandLengths(): void {
+  const one = el("partyHairOne"), many = el("partyHairMany");
+  if (!one || !many) return;
+  // Non-destructive: seed the chosen single length with every hair-head, so the estimate doesn't jump.
+  const sel = val("partyOneLen", "medium");
+  const set = (id: string, v: number) => { const e = fld(id); if (e) e.value = String(v); };
+  set("lenShort", sel === "short" ? adultHairHeads() : 0);
+  set("lenMedium", sel === "medium" ? adultHairHeads() : 0);
+  set("lenLong", sel === "long" ? adultHairHeads() : 0);
+  set("lenXlong", sel === "xlong" ? adultHairHeads() : 0);
+  one.style.display = "none";
+  many.style.display = "";
+  updateLengthHint();
+  renderEstimate();
+}
+
+function collapseLengths(): void {
+  const one = el("partyHairOne"), many = el("partyHairMany");
+  if (!one || !many) return;
+  one.style.display = "";
+  many.style.display = "none";
+  renderEstimate();
+}
+
 function readInput(): EstimateInput {
   const occasion = val("occasion", "wedding") as Occasion;
   // Only weddings collect a venue. Events & lessons settle travel in the personal quote,
@@ -37,11 +92,11 @@ function readInput(): EstimateInput {
   return {
     occasion,
     brideHairLen: val("brideHairLen", "medium") as HairLength,
-    partyHairLen: val("partyHairLen", "medium") as HairLength,
+    partyHair: readPartyHair(),
     bmMakeup: num("bmMakeup"), bmHair: num("bmHair"),
     momMakeup: num("momMakeup"), momHair: num("momHair"),
     fgAge: val("fgAge", "under") === "under" ? "under" : "over",
-    fgMakeup: num("fgMakeup"), fgHair: num("fgHair"),
+    fgMakeup: num("fgMakeup"), fgHair: num("fgHair"), fgHairLen: val("fgHairLen", "medium") as HairLength,
     guestMakeup: num("guestMakeup"), guestHair: num("guestHair"),
     evMakeup: num("evMakeup"), evHair: num("evHair"), evHairLen: val("evHairLen", "medium") as HairLength,
     lessonsAttending: num("lessonsAttending"),
@@ -51,6 +106,7 @@ function readInput(): EstimateInput {
 }
 
 function renderEstimate() {
+  updateLengthHint();
   const out = el("estimateAmount");
   if (!out) return;
   const r = computeEstimate(readInput());
@@ -159,6 +215,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (occ) occ.addEventListener("change", applyOccasion);
   const btn = el("checkTravel");
   if (btn) btn.addEventListener("click", lookupTravel);
+  el("expandLengths")?.addEventListener("click", expandLengths);
+  el("collapseLengths")?.addEventListener("click", collapseLengths);
   applyOccasion();
   renderEstimate();
 });
