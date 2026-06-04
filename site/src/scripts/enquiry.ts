@@ -60,8 +60,9 @@ function collect() {
     add("Party", partySummary());
     add("Party hair", partyHairSummary());
     if (numv("fgHair")) add("Flower-girl hair", `${numv("fgHair")} × ${lenLabel("fgHairLen")}`);
+    if (numv("requestedArtists")) add("Additional artists requested", String(numv("requestedArtists")));
     const promo = (document.getElementById("promoToggle") as HTMLInputElement | null)?.checked;
-    add("Offer", promo ? "Apply ‘book 4+, cheapest look free’" : "Not applied");
+    add("Offer", promo ? "Apply the active promo (cheapest look free, 4+)" : "Not applied");
   } else if (occasion === "lessons") {
     add("Attending", val("lessonsAttending"));
   } else {

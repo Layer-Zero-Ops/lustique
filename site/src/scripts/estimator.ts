@@ -4,8 +4,8 @@
    shared with the future Worker. Map uses free Photon/OSRM.
    ============================================================ */
 import {
-  computeEstimate, travelForKm, DEST_KM,
-  type EstimateInput, type HairBuckets, type HairLength, type Occasion, type TravelBand,
+  computeEstimate, travelForKm, DEST_KM, ACTIVE_PROMO,
+  type EstimateInput, type EstimateLine, type HairBuckets, type HairLength, type Occasion, type TravelBand,
 } from "@lustique/pricing";
 
 declare const L: any; // Leaflet global (loaded via the CDN <script> on the quote page)
@@ -66,9 +66,37 @@ function readInput(): EstimateInput {
     guestMakeup: num("guestMakeup"), guestHair: num("guestHair"),
     evMakeup: num("evMakeup"), evHair: num("evHair"), evHairLen: val("evHairLen", "medium") as HairLength,
     lessonsAttending: num("lessonsAttending"),
-    promoOn: (el("promoToggle") as HTMLInputElement | null)?.checked ?? true,
+    requestedArtists: num("requestedArtists"),
+    // The active promo is config (ACTIVE_PROMO), not hardcoded — the toggle only opts in/out.
+    promo: (el("promoToggle") as HTMLInputElement | null)?.checked === false ? { kind: "none" } : ACTIVE_PROMO,
     travel,
   };
+}
+
+// Show the bride what builds her price (Pieter: "inform what contributes to their overall price").
+// Built with safe DOM + textContent — no innerHTML, no injection surface.
+function renderBreakdown(lines: EstimateLine[], total: number, destination: boolean): void {
+  const box = el("estimateBreakdown");
+  if (!box) return;
+  box.replaceChildren();
+  if (destination || lines.length === 0) return;
+  const heading = document.createElement("div");
+  heading.textContent = "What’s in your estimate";
+  heading.style.cssText = "font-weight:600;color:var(--mocha);margin-bottom:.2rem;";
+  box.append(heading);
+  const money = (n: number) => (n < 0 ? "– R " : "R ") + rand(Math.abs(n));
+  const addRow = (label: string, amount: string, opts: { discount?: boolean; total?: boolean } = {}) => {
+    const r = document.createElement("div");
+    r.style.cssText = `display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;border-top:${opts.total ? "2px" : "1px"} solid rgba(60,42,42,${opts.total ? ".25" : ".08"});${opts.total ? "margin-top:.2rem;" : ""}`;
+    const l = document.createElement("span"); l.textContent = label;
+    const a = document.createElement("span"); a.textContent = amount; a.style.whiteSpace = "nowrap";
+    if (opts.total) { l.style.fontWeight = a.style.fontWeight = "700"; }
+    if (opts.discount) { l.style.color = a.style.color = "var(--burgundy)"; }
+    r.append(l, a);
+    box.append(r);
+  };
+  for (const line of lines) addRow(line.label, money(line.amount), { discount: line.amount < 0 });
+  addRow("Estimated total", "from R " + rand(total), { total: true });
 }
 
 function renderEstimate() {
@@ -87,10 +115,12 @@ function renderEstimate() {
       else if (r.occasion !== "wedding") sub.textContent = `${r.heads} ${r.heads === 1 ? "face" : "faces"} · approximate event estimate`;
       else sub.textContent = `${r.heads} ${r.heads === 1 ? "look" : "looks"} · incl. trial & touch-ups`;
     }
+    renderBreakdown(r.lines, r.total, r.destination);
   } catch (err) {
     console.error("[estimator] render failed — recovering:", err);
     out.textContent = "Let’s tailor your estimate";
     if (sub) sub.textContent = "Add a few details and we’ll confirm it personally.";
+    el("estimateBreakdown")?.replaceChildren();
   }
 }
 

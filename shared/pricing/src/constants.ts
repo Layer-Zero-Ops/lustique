@@ -1,4 +1,4 @@
-import type { HairLength, TravelBand } from "./types";
+import type { HairLength, Promo, TravelBand } from "./types";
 
 type LenMap = Record<HairLength, number>;
 
@@ -11,14 +11,19 @@ export const PRICING = {
   makeup: { bridesmaid: 550, mother: 500, guest: 550, fgUnder: 250, fgOver: 500 },
   hairAdult: { short: 395, medium: 495, long: 595, xlong: 695 } as LenMap,
   hairFgUnder: { short: 200, medium: 250, long: 300, xlong: 400 } as LenMap,
-  assistantTiers: [
-    { min: 13, fee: 2550 },
-    { min: 9, fee: 1700 },
-    { min: 5, fee: 850 },
-  ],
   // studio: ≤30 km free · mid: ~55 km → 770 · far: ~115 km → 1610 · veryfar: ~175 km → 2450 · destination: custom
   travel: { studio: 0, mid: 770, far: 1610, veryfar: 2450, destination: null } as Record<TravelBand, number | null>,
 };
+
+/**
+ * Additional-artist rate (PRICING.md §3). NOT auto-added: for 5+/9+ parties the assistant cost is
+ * already inside the per-person prices. Charged only when the bride requests extra artists for her
+ * timeline — `requestedArtists × ASSISTANT_RATE`.
+ */
+export const ASSISTANT_RATE = 850;
+
+/** The promo currently running (later CMS-driven by Zandeline). Swap this — never hardcode the rule. */
+export const ACTIVE_PROMO: Promo = { kind: "cheapestLookFree", minPeople: 4 };
 
 export const RATE_PER_KM = 7;
 export const FREE_KM = 30;

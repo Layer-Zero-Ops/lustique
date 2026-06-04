@@ -87,17 +87,17 @@ These are the objective rules the estimator uses. Display them with a small diag
 | Editorial | R750 |
 | Photoshoot (lashes incl.) | R600 |
 
-### Day-of additional artist(s) — tiered by party size
+### Day-of additional artist(s)
 
-| Trigger (total people: hair & makeup) | Assistants | Fee |
+**Corrected model (Pieter, 2026-06-04):** for larger parties the additional artist(s) come **with the package** — their cost is **already built into the per-person prices**, so it is **NOT** added on top (the old auto-tier double-counted it and made adding one cheap person spike the total ~R850). An additional artist is charged **only when the bride requests one** for a tighter morning timeline, at **R850 per artist** (`requestedArtists × R850`).
+
+| Party size | Artists working | Surcharge? |
 |---|---|---|
-| 5+ people | 1 | R850 |
-| 9+ people | 2 | R1 700 |
-| 13+ people | 3 | R2 550 |
+| 5+ people | 1 assistant | ✅ included in per-person prices — **no surcharge** |
+| 9+ people | 2 assistants | ✅ included in per-person prices — **no surcharge** |
+| Any size | An extra artist the bride requests | ➕ **R850 each**, added on request only |
 
-*(= R850 per assistant. Tiers taken from the live quote form — clearer than the PDF's flat "R850 each"; confirm thresholds via CONTENT.md C7.)*
-
-> Once booked with an assistant, party size can't be reduced below the assistant threshold (non-refundable) — per the service agreement. The estimator auto-adds the right tier as the bride builds her party.
+> Earlier note (superseded): "the estimator auto-adds the right tier." It no longer does — see above.
 
 ---
 
@@ -227,6 +227,6 @@ Zandeline wants paid workshops but they're not yet defined. **Do not build a wor
 1. ~~Travel mechanic~~ ✅ **Resolved:** R7/km on **round-trip** distance, **free within 30 km**, from the La Montagne studio.
 2. **New-service prices (§6)** — confirm or adjust the eight proposed numbers.
 3. **Editorial bump** — hold R750 or move to R850?
-4. ~~Promotions~~ ✅ **Resolved:** standing promo = "4+ → least-expensive person's hair & makeup free." Promos are **CMS-editable + rotatable** by Zandeline. The estimator/quote applies the *active* promo (discount the cheapest qualifying person when party ≥ 4).
+4. ~~Promotions~~ ✅ **Resolved + implemented (2026-06-04):** the active promo is a **config object** (`ACTIVE_PROMO` in `shared/pricing`), never hardcoded — Zandeline rotates it (later via CMS). Current active promo = "4+ booked → least-expensive look free." **Under-12 flower girls are never the free look** (they're juniors), so adding one never steals the discount; the freed look is always a full party look. The bride is also never the freed look.
 5. **Minimum booking value** — is there a floor (e.g., "weddings under R2,000 not viable on a Saturday")? Useful for gently filtering the "too small / too late" enquiries Zandeline named as non-ideal (Q4).
 6. **Promo engine** — the estimator must compute the "cheapest person free" dynamically. Confirm: does "free" cover that person's **hair + makeup both**, and does the trial count toward the "4+"? (Assumed: both services free; trial excluded from the count.)
