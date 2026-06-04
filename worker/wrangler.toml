@@ -1,0 +1,11 @@
+name = "lustique-form-handler"
+main = "src/index.ts"
+compatibility_date = "2026-06-04"
+
+# Public, non-secret config:
+[vars]
+ALLOWED_ORIGIN = "https://lustiqueco.co.za"   # tighten to the live site origin at deploy
+
+# Secrets — set with `wrangler secret put NAME`, NEVER committed:
+#   BREVO_API_KEY  — Brevo transactional-email key (from Zandeline's Brevo, via the secure link)
+#   NOTIFY_EMAIL   — where enquiries land + the verified Brevo sender, e.g. info@lustiqueco.co.za
