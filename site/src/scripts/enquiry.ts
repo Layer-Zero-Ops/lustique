@@ -89,6 +89,27 @@ const btn = document.getElementById("sendEnquiry") as HTMLButtonElement | null;
 const statusEl = document.getElementById("enquiryStatus");
 const say = (msg: string) => { if (statusEl) statusEl.textContent = msg; };
 
+/** One POST attempt with a 15s timeout. `retriable` = transient (network / timeout / 5xx) → worth one auto-retry. */
+async function postEnquiry(data: unknown): Promise<{ ok: boolean; error?: string; retriable: boolean }> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 15000);
+  try {
+    const res = await fetch("/api/enquiry", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data),
+      signal: ctrl.signal,
+    });
+    const out = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+    if (res.ok && out.ok) return { ok: true, retriable: false };
+    return { ok: false, error: out.error, retriable: res.status >= 500 }; // 4xx (validation) is the user's to fix
+  } catch {
+    return { ok: false, retriable: true }; // network error or the 15s timeout aborted it
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 btn?.addEventListener("click", async () => {
   const data = collect();
   if (!data.name || !data.email) {
@@ -110,30 +131,18 @@ btn?.addEventListener("click", async () => {
   btn.textContent = "Sending…";
   say("");
 
-  // Don't leave a bride staring at "Sending…" forever on a flaky connection.
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 15000);
-  try {
-    const res = await fetch("/api/enquiry", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data),
-      signal: ctrl.signal,
-    });
-    const out = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-    if (res.ok && out.ok) {
-      window.location.href = "thank-you.html";
-      return;
-    }
-    say(out.error || "Something went wrong — please email info@lustiqueco.co.za and we'll jump on it.");
-  } catch (e) {
-    const slow = e instanceof DOMException && e.name === "AbortError";
-    say(slow
-      ? "That took too long to send — please email info@lustiqueco.co.za and we'll jump on it."
-      : "We couldn't send that — check your connection, or email info@lustiqueco.co.za.");
-  } finally {
-    clearTimeout(timer);
+  // Self-heal: one automatic retry on a transient failure before we ask her to email us instead.
+  let result = await postEnquiry(data);
+  if (!result.ok && result.retriable) {
+    say("Connection hiccup — trying once more…");
+    await new Promise((r) => setTimeout(r, 1200));
+    result = await postEnquiry(data);
   }
+  if (result.ok) {
+    window.location.href = "thank-you.html";
+    return;
+  }
+  say(result.error || "We couldn’t send that just now — please email info@lustiqueco.co.za and we’ll jump on it.");
 
   btn.disabled = false;
   btn.textContent = label;

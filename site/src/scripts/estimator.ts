@@ -19,7 +19,7 @@ let map: any, marker: any;
 
 const el = (id: string) => document.getElementById(id);
 const fld = (id: string) => document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
-const num = (id: string) => { const e = fld(id); return e ? (parseInt(e.value, 10) || 0) : 0; };
+const num = (id: string) => { const e = fld(id); return e ? Math.max(0, parseInt(e.value, 10) || 0) : 0; };
 const val = (id: string, d = "") => { const e = fld(id); return e ? e.value : d; };
 const rand = (x: number) => x.toLocaleString("en-ZA").replace(/,/g, " ");
 const setBand = (show: boolean) => { const w = el("bandWrap"); if (w) w.style.display = show ? "" : "none"; };
@@ -72,17 +72,25 @@ function readInput(): EstimateInput {
 }
 
 function renderEstimate() {
-  updateLengthHint();
   const out = el("estimateAmount");
   if (!out) return;
-  const r = computeEstimate(readInput());
-  out.textContent = r.destination ? "Destination — we’ll tailor it" : "from R " + rand(r.total);
   const sub = el("estimateSub");
-  if (sub) {
-    if (r.destination) sub.textContent = "Over 200 km — we’ll send a personalised destination quote";
-    else if (r.occasion === "lessons") sub.textContent = `${r.heads} attending · group lesson`;
-    else if (r.occasion !== "wedding") sub.textContent = `${r.heads} ${r.heads === 1 ? "face" : "faces"} · approximate event estimate`;
-    else sub.textContent = `${r.heads} ${r.heads === 1 ? "look" : "looks"} · incl. trial & touch-ups`;
+  // Safety net: never let the live estimate break silently or flash "NaN" at a bride.
+  try {
+    updateLengthHint();
+    const r = computeEstimate(readInput());
+    if (!r.destination && !Number.isFinite(r.total)) throw new Error(`non-finite total: ${r.total}`);
+    out.textContent = r.destination ? "Destination — we’ll tailor it" : "from R " + rand(r.total);
+    if (sub) {
+      if (r.destination) sub.textContent = "Over 200 km — we’ll send a personalised destination quote";
+      else if (r.occasion === "lessons") sub.textContent = `${r.heads} attending · group lesson`;
+      else if (r.occasion !== "wedding") sub.textContent = `${r.heads} ${r.heads === 1 ? "face" : "faces"} · approximate event estimate`;
+      else sub.textContent = `${r.heads} ${r.heads === 1 ? "look" : "looks"} · incl. trial & touch-ups`;
+    }
+  } catch (err) {
+    console.error("[estimator] render failed — recovering:", err);
+    out.textContent = "Let’s tailor your estimate";
+    if (sub) sub.textContent = "Add a few details and we’ll confirm it personally.";
   }
 }
 
@@ -175,6 +183,9 @@ function applyOccasion() {
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("quoteForm");
   if (!form) return;
+  // Surface (don't swallow) anything that slips past the local handlers.
+  window.addEventListener("error", (e) => console.error("[quote] uncaught error:", e.message));
+  window.addEventListener("unhandledrejection", (e) => console.error("[quote] unhandled rejection:", e.reason));
   form.addEventListener("input", renderEstimate);
   form.addEventListener("change", renderEstimate);
   const occ = el("occasion");
