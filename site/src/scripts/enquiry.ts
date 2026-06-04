@@ -33,18 +33,12 @@ function partySummary(): string {
   return out.join("; ") || "Bride only";
 }
 
-/** Party hair as she entered it — the 4 buckets if expanded, else one length × the head count. */
+/** Party hair as she entered it — the four length buckets. */
 function partyHairSummary(): string {
-  const many = document.getElementById("partyHairMany");
-  const expanded = !!many && (many as HTMLElement).style.display !== "none";
-  if (expanded) {
-    const buckets = (["Short", "Medium", "Long", "Xlong"] as const)
-      .map((k) => { const n = numv("len" + k); return n ? `${n} ${LEN[k.toLowerCase()] ?? k}` : ""; })
-      .filter(Boolean);
-    return buckets.length ? buckets.join(", ") : "—";
-  }
-  const heads = numv("bmHair") + numv("momHair") + numv("guestHair");
-  return heads ? `${heads} × ${lenLabel("partyOneLen")}` : "—";
+  const buckets = (["Short", "Medium", "Long", "Xlong"] as const)
+    .map((k) => { const n = numv("len" + k); return n ? `${n} ${LEN[k.toLowerCase()] ?? k}` : ""; })
+    .filter(Boolean);
+  return buckets.length ? buckets.join(", ") : "—";
 }
 
 function collect() {
@@ -100,6 +94,15 @@ btn?.addEventListener("click", async () => {
   if (!data.name || !data.email) {
     say("Please add your name and email so we can reply.");
     return;
+  }
+  // For weddings, the length buckets must account for everyone needing hair — so the quote is exact.
+  if ((val("occasion") || "wedding") === "wedding") {
+    const need = numv("bmHair") + numv("momHair") + numv("guestHair");
+    const placed = numv("lenShort") + numv("lenMedium") + numv("lenLong") + numv("lenXlong");
+    if (placed !== need) {
+      say(`Almost there — please place all ${need} party hair looks by length (you've placed ${placed}).`);
+      return;
+    }
   }
 
   const label = btn.textContent;

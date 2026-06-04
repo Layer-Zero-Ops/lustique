@@ -16,6 +16,21 @@ describe("travelForKm", () => {
   it("charges round-trip distance * R7 beyond 30 km", () => expect(travelForKm(50)).toBe(700)); // 50*2*7
 });
 
+describe("travel bands (fallback when the map can't pin the venue — re-derived from R7/km round-trip)", () => {
+  // Bride-core only (no party) + the band cost. Bands = midpoint one-way distance × 2 × R7.
+  it("mid band (30–80 km, ~55 km) = R770 round trip", () =>
+    expect(computeEstimate({ ...base, travel: { band: "mid" } }).total).toBe(2890 + 770));
+  it("far band (80–150 km, ~115 km) = R1610 round trip", () =>
+    expect(computeEstimate({ ...base, travel: { band: "far" } }).total).toBe(2890 + 1610));
+  it("very-far band (150–200 km, ~175 km) = R2450 round trip", () =>
+    expect(computeEstimate({ ...base, travel: { band: "veryfar" } }).total).toBe(2890 + 2450));
+  it("destination band zeroes travel + flags destination", () => {
+    const r = computeEstimate({ ...base, travel: { band: "destination" } });
+    expect(r.destination).toBe(true);
+    expect(r.total).toBe(2890);
+  });
+});
+
 describe("computeEstimate — wedding (collapsed single length = parity with the old model)", () => {
   it("solo bride, medium hair, no party = bride core only", () => {
     expect(computeEstimate(base)).toEqual({ total: 2890, heads: 1, destination: false, occasion: "wedding" });

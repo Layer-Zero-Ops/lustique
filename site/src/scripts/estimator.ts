@@ -27,19 +27,9 @@ const setBand = (show: boolean) => { const w = el("bandWrap"); if (w) w.style.di
 // Adult heads needing hair = the bridesmaid + mother + guest hair counts.
 const adultHairHeads = (): number => num("bmHair") + num("momHair") + num("guestHair");
 
-const partyExpanded = (): boolean => {
-  const many = el("partyHairMany");
-  return !!many && (many as HTMLElement).style.display !== "none";
-};
-
-/** Party hair as a length distribution: the 4 buckets when expanded, else one length × the head count. */
+/** Party hair as a length distribution — the four always-visible buckets. */
 function readPartyHair(): HairBuckets {
-  if (partyExpanded()) {
-    return { short: num("lenShort"), medium: num("lenMedium"), long: num("lenLong"), xlong: num("lenXlong") };
-  }
-  const buckets: HairBuckets = { short: 0, medium: 0, long: 0, xlong: 0 };
-  buckets[val("partyOneLen", "medium") as HairLength] = adultHairHeads();
-  return buckets;
+  return { short: num("lenShort"), medium: num("lenMedium"), long: num("lenLong"), xlong: num("lenXlong") };
 }
 
 /** Keep the "N looks need hair" count + the "placed of N" reconciliation note honest as the form changes. */
@@ -48,35 +38,11 @@ function updateLengthHint(): void {
   const headCount = el("hairHeadCount");
   if (headCount) headCount.textContent = String(n);
   const counter = el("lengthsCounter");
-  if (!counter || !partyExpanded()) return;
+  if (!counter) return;
   const placed = num("lenShort") + num("lenMedium") + num("lenLong") + num("lenXlong");
-  if (placed === n) counter.textContent = `✓ all ${n} placed`;
+  if (placed === n) counter.textContent = n ? `✓ all ${n} placed` : "";
   else if (placed < n) counter.textContent = `${placed} of ${n} placed — ${n - placed} to go`;
   else counter.textContent = `${placed} placed — ${placed - n} more than need hair`;
-}
-
-function expandLengths(): void {
-  const one = el("partyHairOne"), many = el("partyHairMany");
-  if (!one || !many) return;
-  // Non-destructive: seed the chosen single length with every hair-head, so the estimate doesn't jump.
-  const sel = val("partyOneLen", "medium");
-  const set = (id: string, v: number) => { const e = fld(id); if (e) e.value = String(v); };
-  set("lenShort", sel === "short" ? adultHairHeads() : 0);
-  set("lenMedium", sel === "medium" ? adultHairHeads() : 0);
-  set("lenLong", sel === "long" ? adultHairHeads() : 0);
-  set("lenXlong", sel === "xlong" ? adultHairHeads() : 0);
-  one.style.display = "none";
-  many.style.display = "";
-  updateLengthHint();
-  renderEstimate();
-}
-
-function collapseLengths(): void {
-  const one = el("partyHairOne"), many = el("partyHairMany");
-  if (!one || !many) return;
-  one.style.display = "";
-  many.style.display = "none";
-  renderEstimate();
 }
 
 function readInput(): EstimateInput {
@@ -215,8 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (occ) occ.addEventListener("change", applyOccasion);
   const btn = el("checkTravel");
   if (btn) btn.addEventListener("click", lookupTravel);
-  el("expandLengths")?.addEventListener("click", expandLengths);
-  el("collapseLengths")?.addEventListener("click", collapseLengths);
   applyOccasion();
   renderEstimate();
 });

@@ -53,18 +53,11 @@ const desc = "Tell us about your wedding day and receive a personalised bridal h
         <p style="font-weight:600;color:var(--mocha);margin:1rem 0 .6rem;">Other guests</p>
         <div class="field-row"><div class="field"><label>Need makeup</label><select id="guestMakeup"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div><div class="field"><label>Need hair</label><select id="guestHair"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div></div>
         <div class="field" id="partyHairWrap" style="margin-top:1rem;">
-          <label>Your bridal party’s hair length <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(for your estimate — we’ll confirm each at the trial)</span></label>
-          <div id="partyHairOne">
-            <select id="partyOneLen"><option value="short">Short (chin)</option><option value="medium" selected>Medium (shoulder)</option><option value="long">Long (mid-back)</option><option value="xlong">X-Long (pantyline)</option></select>
-            <button type="button" id="expandLengths" style="background:none;border:none;color:var(--mocha);text-decoration:underline;cursor:pointer;padding:.5rem 0 0;font:inherit;font-size:.88rem;">Some have different lengths? →</button>
-          </div>
-          <div id="partyHairMany" style="display:none;">
-            <p class="note" style="margin:.2rem 0 .7rem;">Place the <span id="hairHeadCount">0</span> looks that need hair, by length:</p>
-            <div class="field-row"><div class="field"><label>Short</label><input type="number" id="lenShort" min="0" inputmode="numeric" value="0"></div><div class="field"><label>Medium</label><input type="number" id="lenMedium" min="0" inputmode="numeric" value="0"></div></div>
-            <div class="field-row"><div class="field"><label>Long</label><input type="number" id="lenLong" min="0" inputmode="numeric" value="0"></div><div class="field"><label>X-Long</label><input type="number" id="lenXlong" min="0" inputmode="numeric" value="0"></div></div>
-            <p class="note" id="lengthsCounter" style="margin:.2rem 0 0;"></p>
-            <button type="button" id="collapseLengths" style="background:none;border:none;color:var(--mocha);text-decoration:underline;cursor:pointer;padding:.5rem 0 0;font:inherit;font-size:.88rem;">← One length for everyone</button>
-          </div>
+          <label>Your bridal party’s hair length <span style="text-transform:none;letter-spacing:0;font-weight:400;color:#8a7d72;">(of those needing hair — we’ll confirm each at the trial)</span></label>
+          <p class="note" style="margin:.3rem 0 .7rem;">Place the <span id="hairHeadCount">0</span> looks that need hair, by length:</p>
+          <div class="field-row"><div class="field"><label>Short</label><input type="number" id="lenShort" min="0" inputmode="numeric" value="0"></div><div class="field"><label>Medium</label><input type="number" id="lenMedium" min="0" inputmode="numeric" value="0"></div></div>
+          <div class="field-row"><div class="field"><label>Long</label><input type="number" id="lenLong" min="0" inputmode="numeric" value="0"></div><div class="field"><label>X-Long</label><input type="number" id="lenXlong" min="0" inputmode="numeric" value="0"></div></div>
+          <p class="note" id="lengthsCounter" style="margin:.3rem 0 0;"></p>
         </div>
       </div>
       </div>
@@ -82,7 +75,7 @@ const desc = "Tell us about your wedding day and receive a personalised bridal h
         <div class="field"><label>Inspiration link (Pinterest / Instagram)</label><input id="inspo" placeholder="Paste a link — optional"></div>
         <div class="field"><label>Anything else we should know? (skin notes, timings, special requests)</label><textarea id="message" rows="4" placeholder="Tell us anything that helps us prepare…"></textarea></div>
         <div id="promoRow"><label style="display:flex;align-items:center;gap:.6rem;font-size:.92rem;color:#5c5048;margin:.2rem 0 1.3rem;"><input type="checkbox" id="promoToggle" checked style="width:auto;"> Apply the “book 4+, least-expensive look free” offer to my estimate</label></div>
-        <button type="button" class="btn btn-primary" id="sendEnquiry" style="width:100%;justify-content:center;">Send my enquiry</button>
+        <button type="button" class="btn btn-primary" id="sendEnquiry" style="width:100%;justify-content:center;">Request my quote</button>
         <noscript><p class="note center" style="margin-top:1rem;">This live form needs JavaScript to send. To enquire right now, email <a href="mailto:info@lustiqueco.co.za">info@lustiqueco.co.za</a> with your date, venue and party — we reply within 24 hours.</p></noscript>
         <p class="note center" id="enquiryStatus" role="alert" style="margin-top:1rem;color:var(--burgundy);"></p>
         <p class="note center" style="margin-top:1rem;">We reply within 24 hours, often sooner. <strong>Blessings, The Lustique Cosmetology Team.</strong></p>

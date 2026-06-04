@@ -53,7 +53,7 @@ These are the objective rules the estimator uses. Display them with a small diag
 | Bridal hair — trial | R495 | R595 | R695 | R795 |
 | Bridal hair — wedding day | R495 | R595 | R695 | R795 |
 | Strip lashes + touch-up kit | Included | Included | Included | Included |
-| **Bride subtotal (trial + day, hair + makeup)** | **R2,690** | **R2,890** | **R3,090** | **R3,490** |
+| **Bride subtotal (trial + day, hair + makeup)** | **R2,690** | **R2,890** | **R3,090** | **R3,290** |
 
 > Note: the bride's "package" always includes the trial. That's deliberate — Zandeline calls the trial "the most important part of the whole bridal hair and makeup experience."
 

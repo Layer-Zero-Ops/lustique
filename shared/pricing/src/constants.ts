@@ -2,9 +2,10 @@ import type { HairLength, TravelBand } from "./types";
 
 type LenMap = Record<HairLength, number>;
 
-// Verbatim from prototype/estimator.js (lines 8–18, 31). Pass 1 mirrors these EXACTLY,
-// including the known minor bugs (group-lesson flat 600, very-far band 1900) — corrections
-// are a separate, separately-tested follow-up pass.
+// Component prices verbatim from PRICING.md §3 (reconciled against the 2026–2027 PDF).
+// Travel bands are the map-fallback only; re-derived 2026-06-04 from PRICING.md §4
+// (R7/km round-trip) at each range's midpoint one-way distance — the exact figure comes
+// from the map-pin route (travelForKm) whenever geocoding succeeds.
 export const PRICING = {
   brideCore: { short: 2690, medium: 2890, long: 3090, xlong: 3290 } as LenMap,
   makeup: { bridesmaid: 550, mother: 500, guest: 550, fgUnder: 250, fgOver: 500 },
@@ -15,7 +16,8 @@ export const PRICING = {
     { min: 9, fee: 1700 },
     { min: 5, fee: 850 },
   ],
-  travel: { studio: 0, mid: 700, far: 1200, veryfar: 1900, destination: null } as Record<TravelBand, number | null>,
+  // studio: ≤30 km free · mid: ~55 km → 770 · far: ~115 km → 1610 · veryfar: ~175 km → 2450 · destination: custom
+  travel: { studio: 0, mid: 770, far: 1610, veryfar: 2450, destination: null } as Record<TravelBand, number | null>,
 };
 
 export const RATE_PER_KM = 7;
