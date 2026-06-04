@@ -90,13 +90,14 @@ Each phase below is independently checkpointed. Don't start the next until the c
 - [ ] ✅ **Checkpoint:** folders, sent items, and attachments all present in the new mailbox
 
 ### 4B — Cut MX over to Google 🤖
-- [ ] 🤖 In Cloudflare DNS, **replace** the GoDaddy MX records with Google's:
-  - `1 ASPMX.L.GOOGLE.COM`
-  - `5 ALT1.ASPMX.L.GOOGLE.COM` · `5 ALT2.ASPMX.L.GOOGLE.COM`
-  - `10 ALT3.ASPMX.L.GOOGLE.COM` · `10 ALT4.ASPMX.L.GOOGLE.COM`
-- [ ] 🤖 Add SPF (TXT, root): `v=spf1 include:_spf.google.com ~all`  *(we'll extend this for Brevo in Phase 5 — do not create a second SPF record later)*
-- [ ] 🧍🤖 Enable **DKIM** in Workspace admin → it generates a TXT record → 🤖 add it in Cloudflare
-- [ ] 🤖 Add DMARC (TXT, `_dmarc`): `v=DMARC1; p=none; rua=mailto:info@lustiqueco.co.za`
+
+> **Live-state check (2026-06-04, via `dig`):** DNS is at **GoDaddy** (`ns55/56.domaincontrol.com`). Current MX = `0 smtp.secureserver.net`, `10 mailstore1.secureserver.net`. Current SPF = `include:secureserver.net -all`. ⚠️ **A DMARC `p=quarantine` is ALREADY live** (`rua=…@onsecureserver.net`) — so the moment `info@` sends via Google it will be quarantined unless Google SPF+DKIM align. Relax DMARC to `p=none` during cutover, then re-tighten. IMAP source for 4A = `imap.secureserver.net:993` (SSL).
+
+- [ ] 🤖 In DNS (GoDaddy now, or Cloudflare if moved first), **replace** the secureserver.net MX records with Google's **single current record** (Google retired the old 5-record `ASPMX…` set):
+  - `1 smtp.google.com`  *(some panels want a trailing dot: `smtp.google.com.`)*
+- [ ] 🤖 Change SPF (TXT, root) from the secureserver value to: `v=spf1 include:_spf.google.com ~all`  *(we'll extend this for Brevo in Phase 5 — do not create a second SPF record later)*
+- [ ] 🤖 **Relax the existing DMARC** during cutover: edit `_dmarc` to `v=DMARC1; p=none; rua=mailto:info@lustiqueco.co.za` (re-tighten to `p=quarantine` after 48h clean)
+- [ ] 🧍🤖 Enable **DKIM** in Workspace admin (Gmail → Authenticate email) → it generates a `google._domainkey` TXT → 🤖 add it in DNS → click **Start authentication**
 
 ### 4C — Verify, then decommission
 - [ ] ✅ Inbound test: have a friend email `info@` → arrives in **Google**
