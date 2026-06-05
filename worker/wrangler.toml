@@ -7,5 +7,19 @@ compatibility_date = "2026-06-04"
 ALLOWED_ORIGIN = "https://lustiqueco.co.za"   # tighten to the live site origin at deploy
 
 # Secrets — set with `wrangler secret put NAME`, NEVER committed:
-#   BREVO_API_KEY  — Brevo transactional-email key (from Zandeline's Brevo, via the secure link)
-#   NOTIFY_EMAIL   — where enquiries land + the verified Brevo sender, e.g. info@lustiqueco.co.za
+#   BREVO_API_KEY         — Brevo transactional-email key (from Zandeline's Brevo, via the secure link)
+#   NOTIFY_EMAIL          — where enquiries land + the verified Brevo sender, e.g. info@lustiqueco.co.za
+#   SUPABASE_URL          — Supabase project URL (e.g. https://abc.supabase.co)
+#   SUPABASE_SERVICE_KEY  — Supabase service-role key (bypasses RLS)
+#   YOCO_SECRET_KEY       — Yoco API secret key
+#   YOCO_WEBHOOK_SECRET   — Yoco webhook signing secret
+#   SIGNING_SECRET        — HMAC secret for confirm-gate tokens (S3)
+#   TURNSTILE_SECRET      — Cloudflare Turnstile secret key (S2 bot protection)
+
+# Booking core (S1):
+[[r2_buckets]]
+binding = "AUDIT"
+bucket_name = "lustique-audit"
+
+[triggers]
+crons = ["0 6 * * *"]   # 06:00 UTC ≈ 08:00 SAST — keep-warm now; balance sweep in S5

@@ -1,3 +1,6 @@
+import { keepWarm } from "./booking/db";
+import { writeAudit } from "./booking/audit";
+
 /* ============================================================
    LUSTIQUE CO. — form-handler Worker (the stable API boundary)
 
@@ -13,9 +16,18 @@
    ============================================================ */
 
 export interface Env {
+  // existing (enquiry)
   BREVO_API_KEY: string;
   NOTIFY_EMAIL: string;
   ALLOWED_ORIGIN: string;
+  // booking core (added S1; consumers land in S2–S5)
+  SUPABASE_URL: string;
+  SUPABASE_SERVICE_KEY: string;
+  YOCO_SECRET_KEY: string;
+  YOCO_WEBHOOK_SECRET: string;
+  SIGNING_SECRET: string;
+  TURNSTILE_SECRET: string;
+  AUDIT: { put(key: string, value: string): Promise<unknown> };
 }
 
 interface Detail {
@@ -151,5 +163,16 @@ export default {
         origin,
       );
     }
+  },
+
+  // Daily cron (wrangler.toml). v1: keep the free-tier DB warm + leave an audit breadcrumb.
+  // The balance-reminder sweep + token expiry land in S5.
+  async scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+    ctx.waitUntil(
+      (async () => {
+        await keepWarm(env);
+        await writeAudit(env, { bookingId: null, eventType: "cron.keepwarm", payload: {} });
+      })().catch(() => {}), // never throw out of the scheduled handler
+    );
   },
 };
