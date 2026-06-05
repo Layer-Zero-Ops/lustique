@@ -4,8 +4,15 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE, OG_IMG, SITE_JSONLD } from "../data/site";
 
-interface Props { slug: string; title: string; desc: string; jsonld?: object; }
-const { slug, title, desc, jsonld } = Astro.props;
+interface Props { slug: string; title: string; desc: string; jsonld?: object; breadcrumb?: Array<{name: string; item?: string}>; }
+const { slug, title, desc, jsonld, breadcrumb } = Astro.props;
+const breadcrumbJsonLd = breadcrumb ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: SITE + "/" },
+    ...breadcrumb.map((crumb, i) => ({ "@type": "ListItem", position: i + 2, name: crumb.name, item: crumb.item ?? (SITE + "/" + slug) })),
+  ],
+} : null;
 const canonical = `${SITE}/${slug === "index.html" ? "" : slug}`;
 ---
 <!DOCTYPE html>
@@ -16,9 +23,10 @@ const canonical = `${SITE}/${slug === "index.html" ? "" : slug}`;
   <title>{title}</title>
   <meta name="description" content={desc} />
   <link rel="canonical" href={canonical} />
-  <link rel="icon" href="assets/logo.png" type="image/png" />
-  <link rel="apple-touch-icon" href="assets/logo.png" />
-  <link rel="alternate icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Lustique Co." />
   <meta property="og:title" content={title} />
@@ -32,6 +40,7 @@ const canonical = `${SITE}/${slug === "index.html" ? "" : slug}`;
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script type="application/ld+json" set:html={JSON.stringify(SITE_JSONLD)} />
   {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+  {breadcrumbJsonLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />}
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>

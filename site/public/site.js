@@ -9,7 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // mobile menu
   const toggle = document.getElementById("navToggle");
   const links = document.getElementById("navLinks");
-  if (toggle && links) toggle.addEventListener("click", () => links.classList.toggle("open"));
+  if (toggle && links) {
+    toggle.setAttribute("aria-controls", "navLinks");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.addEventListener("click", () => {
+      const open = links.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
 
   // scroll reveals
   const io = new IntersectionObserver((entries) => {
@@ -66,11 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     const wire = (row, set) => {
       if (!row) return;
+      row.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.classList.contains("active") ? "true" : "false"));
       row.addEventListener("click", (e) => {
         const b = e.target.closest("button");
         if (!b) return;
-        row.querySelectorAll("button").forEach(x => x.classList.remove("active"));
+        row.querySelectorAll("button").forEach(x => { x.classList.remove("active"); x.setAttribute("aria-pressed", "false"); });
         b.classList.add("active");
+        b.setAttribute("aria-pressed", "true");
         set(b.dataset.filter);
         apply();
       });
@@ -87,12 +96,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // FAQ accordion
-  document.querySelectorAll(".faq-q").forEach(q => {
+  // FAQ accordion — ARIA wired on init so screen readers see the relationship from the start
+  document.querySelectorAll(".faq-q").forEach((q, i) => {
+    const item = q.closest(".faq-item");
+    const ans = item.querySelector(".faq-a");
+    const id = "faq-ans-" + i;
+    ans.id = id;
+    q.setAttribute("aria-expanded", "false");
+    q.setAttribute("aria-controls", id);
     q.addEventListener("click", () => {
-      const item = q.closest(".faq-item");
-      const ans = item.querySelector(".faq-a");
       const open = item.classList.toggle("open");
+      q.setAttribute("aria-expanded", open ? "true" : "false");
       ans.style.maxHeight = open ? ans.scrollHeight + "px" : "";
     });
   });

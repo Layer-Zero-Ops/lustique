@@ -1,10 +1,65 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Photo from "../components/Photo.astro";
+import { SITE } from "../data/site";
 const title = "Services — Lustique Co.";
 const desc = "Bridal hair & makeup, plus matric, editorial, engagement, maternity, corporate, pageant and group lessons.";
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service", "@id": SITE + "/services.html#bridal-makeup",
+      name: "Bridal Makeup", provider: { "@id": SITE + "/" },
+      description: "Customised bridal makeup — soft glow or bold glam — using premium, long-wearing, photography-friendly products. From R850.",
+      areaServed: "Gauteng", serviceType: "BeautyTreatment",
+    },
+    {
+      "@type": "Service", "@id": SITE + "/services.html#bridal-hair",
+      name: "Bridal Hair Styling", provider: { "@id": SITE + "/" },
+      description: "Romantic curls, elegant updos or effortless waves styled to hold all day. From R495.",
+      areaServed: "Gauteng", serviceType: "BeautyTreatment",
+    },
+    {
+      "@type": "Service", "@id": SITE + "/services.html#matric",
+      name: "Matric Farewell Makeup", provider: { "@id": SITE + "/" },
+      description: "A standout look for her big night — glam that photographs beautifully and lasts through every dance. R750.",
+      areaServed: "Gauteng", serviceType: "BeautyTreatment",
+    },
+    {
+      "@type": "Service", "@id": SITE + "/services.html#editorial",
+      name: "Editorial & Photoshoot Makeup", provider: { "@id": SITE + "/" },
+      description: "Camera-ready makeup for editorial, brand and personal shoots. Lashes included on photoshoots. From R600.",
+      areaServed: "Gauteng", serviceType: "BeautyTreatment",
+    },
+    {
+      "@type": "Service", "@id": SITE + "/services.html#engagement",
+      name: "Engagement & Maternity Shoot Makeup", provider: { "@id": SITE + "/" },
+      description: "Soft, radiant looks for engagement and maternity shoots. From R650.",
+      areaServed: "Gauteng", serviceType: "BeautyTreatment",
+    },
+    {
+      "@type": "Service", "@id": SITE + "/services.html#pageant",
+      name: "Pageant & Stage Makeup", provider: { "@id": SITE + "/" },
+      description: "Bold, long-wearing makeup built for stage lighting and the camera. From R950.",
+      areaServed: "Gauteng", serviceType: "BeautyTreatment",
+    },
+    {
+      "@type": "Service", "@id": SITE + "/services.html#group-lessons",
+      name: "Group Makeup Lessons", provider: { "@id": SITE + "/" },
+      description: "Learn to do your own makeup — groups of 6+, at Bez Ranch or on location. Includes a brush-set goodie bag. From R600 per person.",
+      areaServed: "Gauteng", serviceType: "EducationalOccupationalProgram",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE + "/" },
+        { "@type": "ListItem", position: 2, name: "Services", item: SITE + "/services.html" },
+      ],
+    },
+  ],
+};
 ---
-<BaseLayout slug="services.html" title={title} desc={desc}>
+<BaseLayout slug="services.html" title={title} desc={desc} jsonld={serviceJsonLd}>
 
   
   <section class="page-hero">
