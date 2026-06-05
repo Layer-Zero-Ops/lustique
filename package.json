@@ -2,7 +2,7 @@
   "name": "lustique",
   "private": true,
   "version": "0.0.0",
-  "workspaces": ["shared/*", "site"],
+  "workspaces": ["shared/*", "site", "worker"],
   "scripts": {
     "dev": "npm run dev --workspace site",
     "build": "npm run build --workspace site",
