@@ -1,5 +1,5 @@
 export const SITE = "https://lustiqueco.co.za";
-export const OG_IMG = SITE + "/assets/hero.jpg";
+export const OG_IMG = SITE + "/assets/og-share.jpg";
 
 // [label, href] — hrefs keep the .html suffix so internal links match the prototype
 // (astro.config build.format: "file" emits /about.html etc.)
